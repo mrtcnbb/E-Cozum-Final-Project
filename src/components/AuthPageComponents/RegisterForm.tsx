@@ -1,4 +1,4 @@
-import { Box, Button, FormControl, FormLabel, Input, VStack } from '@chakra-ui/react';
+import { Box, Button, VStack } from '@chakra-ui/react';
 import { CheckCircleIcon } from '@chakra-ui/icons';
 import { Center } from '@chakra-ui/react';
 
