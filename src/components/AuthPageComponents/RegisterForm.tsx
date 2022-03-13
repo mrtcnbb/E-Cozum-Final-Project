@@ -4,6 +4,7 @@ import { Center } from '@chakra-ui/react';
 
 import { FC } from 'react';
 import useHandleFormData from '../../hooks/useHandleFormData';
+import FormInput from './FormInput';
 
 const RegisterForm: FC = () => {
   const { formData, handleFormData } = useHandleFormData();
@@ -19,32 +20,26 @@ const RegisterForm: FC = () => {
         <form onSubmit={(e) => handleSubmit(e)}>
           <VStack spacing={5}>
             <CheckCircleIcon color="blue.500" boxSize="10" />
-            <FormControl>
-              <FormLabel htmlFor="username">Username</FormLabel>
-              <Input id="username" name="username" placeholder="username" onChange={handleFormData} required />
-            </FormControl>
-            <FormControl>
-              <FormLabel htmlFor="password">Password</FormLabel>
-              <Input
-                id="password"
-                type="password"
-                name="password"
-                placeholder="password"
-                required
-                onChange={handleFormData}
-              />
-            </FormControl>
-            <FormControl>
-              <FormLabel htmlFor="confirm-password">Confirm Password</FormLabel>
-              <Input
-                id="confirm-password"
-                type="password"
-                name="passwordConfirm"
-                placeholder="confirm password"
-                required
-                onChange={handleFormData}
-              />
-            </FormControl>
+            <FormInput
+              inputLabelText="Username"
+              propsText="username"
+              placeholder="username"
+              onChange={handleFormData}
+            />
+            <FormInput
+              inputLabelText="Password"
+              propsText="password"
+              placeholder="password"
+              type="password"
+              onChange={handleFormData}
+            />
+            <FormInput
+              inputLabelText="Confirm Password"
+              propsText="passwordConfirm"
+              placeholder="confirm password"
+              type="password"
+              onChange={handleFormData}
+            />
             <Button type="submit" color="purple.500">
               Register
             </Button>
