@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { Box, Text } from '@chakra-ui/react';
 import { AddIcon } from '@chakra-ui/icons';
-import UserListPopver from './UserListPopver';
+import MembersListPopver from './MembersListPopver';
 import UserAvatars from './UserAvatars';
 
 const BoardCard: FC = () => {
@@ -24,7 +24,7 @@ const BoardCard: FC = () => {
       m="40"
     >
       <Box display="flex" justifyContent="flex-end" width="100%">
-        <UserListPopver />
+        <MembersListPopver />
       </Box>
       <Box sx={{ flex: '1' }} display="flex" flexDirection="column" justifyContent="space-evenly" alignItems="center">
         <AddIcon
