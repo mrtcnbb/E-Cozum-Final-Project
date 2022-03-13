@@ -1,6 +1,6 @@
 import { UnlockIcon } from '@chakra-ui/icons';
 import { Box, Button, Center, FormControl, FormLabel, Input, VStack } from '@chakra-ui/react';
-import React, { FC, useState } from 'react';
+import React, { FC } from 'react';
 import useHandleFormData from '../../hooks/useHandleFormData';
 
 const LoginForm: FC = () => {

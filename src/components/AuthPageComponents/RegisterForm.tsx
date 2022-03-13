@@ -2,7 +2,7 @@ import { Box, Button, FormControl, FormLabel, Input, VStack } from '@chakra-ui/r
 import { CheckCircleIcon } from '@chakra-ui/icons';
 import { Center } from '@chakra-ui/react';
 
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import useHandleFormData from '../../hooks/useHandleFormData';
 
 const RegisterForm: FC = () => {
