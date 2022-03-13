@@ -6,9 +6,9 @@ import Auth from './pages/auth/Auth';
 function App() {
   return (
     <div>
-      <Auth />
       <Header />
       <BoardCard />
+      <Auth />
     </div>
   );
 }

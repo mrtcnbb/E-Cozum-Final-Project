@@ -4,17 +4,17 @@ import { FC } from 'react';
 
 const Header: FC = () => {
   return (
-    <Box bg="white" w="100%" p={3} display="flex" alignItems="center" justifyContent="flex-end" boxShadow="md">
+    <Box bg="white" w="100%" p={2} display="flex" alignItems="center" justifyContent="flex-end" boxShadow="md">
       <Menu>
         <MenuButton px={3} py={1} _hover={{ background: '#F6F6F7' }} alignItems="center" borderRadius="3xl">
-          <Flex>
+          <Flex alignItems="center">
             <Box mr="3" textAlign="end">
-              <Text fontWeight="bold" fontSize="sm">
+              <Text fontWeight="bold" fontSize={13}>
                 Muratcan Baba
               </Text>
-              <Text fontSize="xs">Guest</Text>
+              <Text fontSize={11}>Guest</Text>
             </Box>
-            <Avatar bg="purple.500" color="white" name="Muratcan Baba" size="md" />
+            <Avatar bg="purple.500" color="white" name="Muratcan Baba" size="sm" />
           </Flex>
         </MenuButton>
         <MenuList>
