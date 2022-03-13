@@ -16,7 +16,7 @@ import {
 } from '@chakra-ui/react';
 import { FC, useRef } from 'react';
 
-const UserListPopver: FC = () => {
+const MembersListPopver: FC = () => {
   // const { onClose } = usePopoverContext();
   const { onOpen, onClose, isOpen } = useDisclosure();
   const firstFieldRef = useRef(null);
@@ -61,4 +61,4 @@ const UserListPopver: FC = () => {
   );
 };
 
-export default UserListPopver;
+export default MembersListPopver;
