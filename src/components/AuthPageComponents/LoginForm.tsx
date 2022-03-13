@@ -1,20 +1,14 @@
 import { UnlockIcon } from '@chakra-ui/icons';
-import { Box, Button, Center, Input, VStack } from '@chakra-ui/react';
+import { Box, Button, Center, FormControl, FormLabel, Input, VStack } from '@chakra-ui/react';
 import React, { FC, useState } from 'react';
+import useHandleFormData from '../../hooks/useHandleFormData';
 
 const LoginForm: FC = () => {
-  const [loginFormData, setLoginFormData] = useState<object>({});
-
-  const handleLoginFieldChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const name = event.currentTarget.name;
-    const value = event.currentTarget.value;
-
-    setLoginFormData((prev) => ({ ...prev, [name]: value }));
-  };
+  const { formData, handleFormData } = useHandleFormData();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log('it works');
+    console.log(formData);
   };
 
   return (
@@ -25,15 +19,28 @@ const LoginForm: FC = () => {
         p={5}
         borderRadius="10px"
         boxShadow="lg"
-        my="40"
+        my="36"
         bg="white"
         _hover={{ cursor: 'pointer' }}
       >
         <form onSubmit={(e) => handleSubmit(e)}>
           <VStack spacing={5}>
             <UnlockIcon color="green.500" boxSize="10" />
-            <Input name="username" placeholder="username" />
-            <Input type="password" placeholder="password" />
+            <FormControl>
+              <FormLabel htmlFor="username">Username</FormLabel>
+              <Input id="username" name="username" placeholder="username" onChange={handleFormData} required />
+            </FormControl>
+            <FormControl>
+              <FormLabel htmlFor="password">Password</FormLabel>
+              <Input
+                id="password"
+                type="password"
+                name="password"
+                placeholder="password"
+                required
+                onChange={handleFormData}
+              />
+            </FormControl>
             <Button type="submit" color="purple.500">
               Login
             </Button>
