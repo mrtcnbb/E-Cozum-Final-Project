@@ -17,6 +17,24 @@ const BoardsList: FC = () => {
       <BoardCard addBoard={true} />
       <BoardCard addBoard={false} boardName="ACME Frontend Applications" />
       <BoardCard addBoard={false} boardName="ACME Frontend Applications" />
+      <BoardCard addBoard={true} />
+      <BoardCard addBoard={false} boardName="ACME Frontend Applications" />
+      <BoardCard addBoard={false} boardName="ACME Frontend Applications" />
+      <BoardCard addBoard={true} />
+      <BoardCard addBoard={false} boardName="ACME Frontend Applications" />
+      <BoardCard addBoard={false} boardName="ACME Frontend Applications" />
+      <BoardCard addBoard={true} />
+      <BoardCard addBoard={false} boardName="ACME Frontend Applications" />
+      <BoardCard addBoard={false} boardName="ACME Frontend Applications" />
+      <BoardCard addBoard={true} />
+      <BoardCard addBoard={false} boardName="ACME Frontend Applications" />
+      <BoardCard addBoard={false} boardName="ACME Frontend Applications" />
+      <BoardCard addBoard={true} />
+      <BoardCard addBoard={false} boardName="ACME Frontend Applications" />
+      <BoardCard addBoard={false} boardName="ACME Frontend Applications" />
+      <BoardCard addBoard={true} />
+      <BoardCard addBoard={false} boardName="ACME Frontend Applications" />
+      <BoardCard addBoard={false} boardName="ACME Frontend Applications" />
     </Box>
   );
 };
