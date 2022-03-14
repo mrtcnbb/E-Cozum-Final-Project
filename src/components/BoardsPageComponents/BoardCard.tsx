@@ -23,9 +23,6 @@ const BoardCard: FC = () => {
       p="2"
       m="40"
     >
-      <Box display="flex" justifyContent="flex-end" width="100%">
-        <MembersListPopver />
-      </Box>
       <Box sx={{ flex: '1' }} display="flex" flexDirection="column" justifyContent="space-evenly" alignItems="center">
         <AddIcon
           boxSize="12"
@@ -36,7 +33,6 @@ const BoardCard: FC = () => {
           p="2"
           onClick={() => alert('list')}
         />
-
         <Text textAlign="center" fontWeight="semibold">
           Add new board
         </Text>
