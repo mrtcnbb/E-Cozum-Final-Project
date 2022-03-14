@@ -6,6 +6,7 @@ import UserAvatars from './UserAvatars';
 const BoardCard: FC = () => {
   return (
     <Box
+      as="button"
       border="1px"
       borderRadius="2xl"
       boxShadow="sm"
