@@ -26,9 +26,23 @@ const BoardCard: FC<BoardCardProps> = ({ addBoard, boardName }) => {
       justifyContent="center"
       flexDirection="column"
       p="2"
-      m="40"
+      onClick={() => {
+        if (addBoard) {
+          console.log('this is add board');
+        } else {
+          console.log('this is existing board');
+        }
+      }}
     >
-      <Box sx={{ flex: '1' }} display="flex" flexDirection="column" justifyContent="space-evenly" alignItems="center">
+      <Box
+        sx={{ flex: '1' }}
+        display="flex"
+        flexDirection="column"
+        width="174px"
+        height="174px"
+        justifyContent="space-evenly"
+        alignItems="center"
+      >
         {/* <AddIcon boxSize="12" color="white" border="1px" borderRadius="full" bg="blue.200" p="2" /> */}
         {addBoard ? (
           <AddIcon boxSize="12" color="white" border="1px" borderRadius="full" bg="blue.200" p="2" />

@@ -18,14 +18,7 @@ const Header: FC = () => {
           </Flex>
         </MenuButton>
         <MenuList>
-          <MenuItem
-            icon={<LockIcon />}
-            onClick={() => {
-              console.log('heeeeyyy');
-            }}
-          >
-            Logout
-          </MenuItem>
+          <MenuItem icon={<LockIcon />}>Logout</MenuItem>
         </MenuList>
       </Menu>
     </Box>
