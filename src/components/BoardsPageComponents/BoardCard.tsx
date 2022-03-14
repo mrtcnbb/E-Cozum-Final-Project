@@ -1,7 +1,6 @@
 import { FC } from 'react';
 import { Box, Text } from '@chakra-ui/react';
 import { AddIcon } from '@chakra-ui/icons';
-import MembersListPopver from './MembersListPopver';
 import UserAvatars from './UserAvatars';
 
 const BoardCard: FC = () => {
