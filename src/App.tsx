@@ -7,7 +7,8 @@ function App() {
   return (
     <div>
       <Header />
-      <BoardCard />
+      <BoardCard addBoard={false} boardName="ACME Frontend Applications" />
+      <BoardCard addBoard={true} />
       <Auth />
     </div>
   );

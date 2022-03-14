@@ -1,9 +1,14 @@
 import { FC } from 'react';
-import { Box, Text } from '@chakra-ui/react';
+import { Box, Text, Icon } from '@chakra-ui/react';
 import { AddIcon } from '@chakra-ui/icons';
-import UserAvatars from './UserAvatars';
+import { RiBarChartBoxLine } from 'react-icons/ri';
 
-const BoardCard: FC = () => {
+interface BoardCardProps {
+  addBoard: boolean;
+  boardName?: string;
+}
+
+const BoardCard: FC<BoardCardProps> = ({ addBoard, boardName }) => {
   return (
     <Box
       as="button"
@@ -24,21 +29,24 @@ const BoardCard: FC = () => {
       m="40"
     >
       <Box sx={{ flex: '1' }} display="flex" flexDirection="column" justifyContent="space-evenly" alignItems="center">
-        <AddIcon
-          boxSize="12"
-          color="white"
-          border="1px"
-          borderRadius="full"
-          bg="blue.200"
-          p="2"
-          onClick={() => alert('list')}
-        />
-        <Text textAlign="center" fontWeight="semibold">
+        {/* <AddIcon boxSize="12" color="white" border="1px" borderRadius="full" bg="blue.200" p="2" /> */}
+        {addBoard ? (
+          <AddIcon boxSize="12" color="white" border="1px" borderRadius="full" bg="blue.200" p="2" />
+        ) : (
+          <Icon boxSize="12" as={RiBarChartBoxLine} />
+        )}
+        {/* <Text textAlign="center" fontWeight="semibold">
           Add new board
-        </Text>
-      </Box>
-      <Box>
-        <UserAvatars />
+        </Text> */}
+        {addBoard ? (
+          <Text textAlign="center" fontWeight="semibold">
+            Add new board
+          </Text>
+        ) : (
+          <Text textAlign="center" fontWeight="semibold">
+            {boardName}
+          </Text>
+        )}
       </Box>
     </Box>
   );
