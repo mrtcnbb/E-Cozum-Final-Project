@@ -4,7 +4,17 @@ import { FC } from 'react';
 
 const Header: FC = () => {
   return (
-    <Box bg="white" w="100%" p={2} display="flex" alignItems="center" justifyContent="flex-end" boxShadow="md">
+    <Box
+      bg="white"
+      w="100%"
+      p={2}
+      display="flex"
+      alignItems="center"
+      justifyContent="flex-end"
+      boxShadow="md"
+      position="fixed"
+      zIndex="999"
+    >
       <Menu>
         <MenuButton px={3} py={1} _hover={{ background: '#F6F6F7' }} alignItems="center" borderRadius="3xl">
           <Flex alignItems="center">
