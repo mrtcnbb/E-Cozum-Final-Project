@@ -22,10 +22,10 @@ const EditableAddButton: FC<EditableAddButtonProps> = ({ item }) => {
     <Box
       display="flex"
       alignItems="flex-start"
-      p={2.5}
+      p={item === 'card' ? '2' : '3.5'}
       backgroundColor="#F9F9F9"
       boxShadow={item === 'card' ? 'none' : 'md'}
-      width={'full'}
+      width={item === 'card' ? 'full' : '320px'}
       borderRadius="2xl"
     >
       {!addItem ? (
