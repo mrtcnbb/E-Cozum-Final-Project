@@ -19,6 +19,7 @@ const BoardDetailsDrawer: FC = () => {
         color="white"
         ml="10"
         aria-label="open settings"
+        _focus={{ outline: '0' }}
         onClick={onOpen}
         icon={<SettingsIcon />}
       />
