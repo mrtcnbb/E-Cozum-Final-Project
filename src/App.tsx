@@ -8,6 +8,9 @@ function App() {
   return (
     <div>
       <Header />
+      <br />
+      <br />
+      <br />
       <Auth />
       <BoardsList />
     </div>

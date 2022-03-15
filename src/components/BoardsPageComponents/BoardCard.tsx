@@ -43,15 +43,11 @@ const BoardCard: FC<BoardCardProps> = ({ addBoard, boardName }) => {
         justifyContent="space-evenly"
         alignItems="center"
       >
-        {/* <AddIcon boxSize="12" color="white" border="1px" borderRadius="full" bg="blue.200" p="2" /> */}
         {addBoard ? (
           <AddIcon boxSize="12" color="white" border="1px" borderRadius="full" bg="blue.200" p="2" />
         ) : (
           <Icon boxSize="12" as={RiBarChartBoxLine} />
         )}
-        {/* <Text textAlign="center" fontWeight="semibold">
-          Add new board
-        </Text> */}
         {addBoard ? (
           <Text textAlign="center" fontWeight="semibold">
             Add new board
