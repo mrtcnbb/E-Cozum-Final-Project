@@ -23,14 +23,13 @@ const EditableAddButton: FC<EditableAddButtonProps> = ({ item }) => {
       display="flex"
       alignItems="flex-start"
       p={2.5}
-      backgroundColor="#f1f1f1"
-      boxShadow="md"
-      m="50px"
-      width={320}
+      backgroundColor="#F9F9F9"
+      boxShadow={item === 'card' ? 'none' : 'md'}
+      width={'full'}
       borderRadius="2xl"
     >
       {!addItem ? (
-        <Box as="button" onClick={() => setAddItem(true)}>
+        <Box onClick={() => setAddItem(true)}>
           <Button
             leftIcon={
               <AddIcon
@@ -49,32 +48,34 @@ const EditableAddButton: FC<EditableAddButtonProps> = ({ item }) => {
           </Button>
         </Box>
       ) : (
-        <Box display="flex" flexDirection="column" width="full" gap="5">
-          <InputGroup>
-            <Input
-              width={'full'}
-              placeholder={`${item} name`}
-              borderColor="black"
-              value={itemName}
-              onChange={(e) => setItemName(e.target.value)}
-            />
-            <InputRightElement
-              onClick={() => {
-                setItemName('');
-                setAddItem(false);
-              }}
-            >
-              <IconButton
-                isRound={true}
-                size="sm"
-                variant="none"
-                color="gray.300"
-                aria-label="edit name"
-                _hover={{ color: 'gray.400', bg: 'gray.200' }}
-                icon={<CloseIcon />}
+        <Box display="flex" flexDirection="column" alignItems="flex-start" width="full" gap="5">
+          <Box width="full">
+            <InputGroup>
+              <Input
+                width={'full'}
+                placeholder={`${item} name`}
+                borderColor="black"
+                value={itemName}
+                onChange={(e) => setItemName(e.target.value)}
               />
-            </InputRightElement>
-          </InputGroup>
+              <InputRightElement
+                onClick={() => {
+                  setItemName('');
+                  setAddItem(false);
+                }}
+              >
+                <IconButton
+                  isRound={true}
+                  size="sm"
+                  variant="none"
+                  color="gray.300"
+                  aria-label="edit name"
+                  _hover={{ color: 'gray.400', bg: 'gray.200' }}
+                  icon={<CloseIcon />}
+                />
+              </InputRightElement>
+            </InputGroup>
+          </Box>
           <Box>
             <Button
               disabled={itemName.trim() === ''}
