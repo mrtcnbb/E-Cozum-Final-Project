@@ -1,5 +1,6 @@
-import { Box, Text } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react';
 import { FC } from 'react';
+import CardBox from './CardBox';
 import EditableAddButton from './EditableAddButton';
 import NameSettingsHolder from './NameSettingsHolder';
 
@@ -11,9 +12,8 @@ const ListBox: FC = () => {
       </Box>
       <Box
         minHeight="30px"
-        maxHeight="60px"
+        maxHeight="360px"
         overflowY="auto"
-        p="10px"
         sx={{
           '&::-webkit-scrollbar': {
             width: '5px',
@@ -26,14 +26,21 @@ const ListBox: FC = () => {
           },
         }}
       >
-        <Text bg={'red'}>Some text</Text>
-        <Text>Some text</Text>
-        <Text>Some text</Text>
-        <Text>Some text</Text>
-        <Text>Some text</Text>
-        <Text>Some text</Text>
-        <Text>Some text</Text>
-        <Text>Some text</Text>
+        <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" gap="16px" py="20px">
+          <CardBox />
+          <CardBox />
+          <CardBox />
+          <CardBox />
+          <CardBox />
+          <CardBox />
+          <CardBox />
+          <CardBox />
+          <CardBox />
+          <CardBox />
+          <CardBox />
+          <CardBox />
+          <CardBox />
+        </Box>
       </Box>
       <Box borderTop="1px" borderColor="rgb(230,230,230)">
         <EditableAddButton item="card" />
