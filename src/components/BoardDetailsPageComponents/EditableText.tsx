@@ -5,29 +5,36 @@ import { CheckIcon } from '@chakra-ui/icons';
 interface EditableTextProps {
   editItemName: boolean;
   textSize: string;
-  handleEdiItemName: (isEditable: boolean) => void;
+  textColor: string;
+  handleEditItemName: (isEditable: boolean) => void;
 }
 
-const EditableText: FC<EditableTextProps> = ({ editItemName, textSize, handleEdiItemName }) => {
+const EditableText: FC<EditableTextProps> = ({ editItemName, textSize, textColor, handleEditItemName }) => {
   const [listName, setListName] = useState('trial list');
 
   const handleItemNameEntry = () => {
     if (listName.trim() === '') {
       alert('Bu alan boş bırakılamaz!');
     } else {
-      handleEdiItemName(false);
+      handleEditItemName(false);
     }
   };
 
   return (
     <Box marginTop="2.5" pl={4}>
       {!editItemName ? (
-        <Text fontSize={textSize} _hover={{ cursor: 'pointer' }} onClick={() => handleEdiItemName(true)}>
+        <Text
+          color={textColor}
+          fontWeight="semibold"
+          fontSize={textSize}
+          _hover={{ cursor: 'pointer' }}
+          onClick={() => handleEditItemName(true)}
+        >
           {listName}
         </Text>
       ) : (
         <InputGroup>
-          <Input borderColor="black" value={listName} onChange={(e) => setListName(e.target.value)} />
+          <Input color={textColor} borderColor="black" value={listName} onChange={(e) => setListName(e.target.value)} />
           <InputRightElement
             onClick={() => {
               handleItemNameEntry();
