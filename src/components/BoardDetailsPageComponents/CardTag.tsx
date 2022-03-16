@@ -16,7 +16,7 @@ const CardTag: FC<CardTagProps> = ({ tagType, test }) => {
       colorScheme={tagType === 'dueDate' && test === 'test' ? 'teal' : 'blackAlpha'}
     >
       <TagLeftIcon boxSize="18px" as={tagType === 'dueDate' ? BiTimeFive : BiCheckCircle} />
-      <TagLabel>Test Tag</TagLabel>
+      <TagLabel lineHeight="taller">Test Tag</TagLabel>
     </Tag>
   );
 };
