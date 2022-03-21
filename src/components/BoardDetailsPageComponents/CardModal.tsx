@@ -87,8 +87,9 @@ export default function CardModal() {
                         dateFormat="yyyy/MM/dd"
                         selected={startDate}
                         onChange={(date) => {
-                          date && setStartDate(date);
-                          console.log('date: ', format(new Date(date!), 'MMM dd yy'));
+                          if (!date) return;
+                          setStartDate(date);
+                          console.log('date: ', format(new Date(date), 'MMM dd yy'));
                           console.log('theDueDate: ', theDueDate);
                           setDueDate(() => !dueDate);
                         }}

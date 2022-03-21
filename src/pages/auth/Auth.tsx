@@ -3,7 +3,11 @@ import { FC } from 'react';
 import LoginForm from '../../components/AuthPageComponents/LoginForm';
 import RegisterForm from '../../components/AuthPageComponents/RegisterForm';
 
-const Auth: FC = () => {
+interface AuthProps {
+  handleIsLogged: (logged: boolean) => void;
+}
+
+const Auth: FC<AuthProps> = ({ handleIsLogged }) => {
   return (
     <Tabs isFitted variant="enclosed" colorScheme="purple">
       <TabList mb="1em" bg="white">
@@ -15,7 +19,7 @@ const Auth: FC = () => {
           <RegisterForm />
         </TabPanel>
         <TabPanel>
-          <LoginForm />
+          <LoginForm handleIsLogged={handleIsLogged} />
         </TabPanel>
       </TabPanels>
     </Tabs>

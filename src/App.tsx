@@ -1,23 +1,33 @@
 import './App.css';
-import CardModal from './components/BoardDetailsPageComponents/CardModal';
-import BoardsList from './components/BoardsPageComponents/BoardsList';
-import Header from './components/HomePageComponents/Header';
+import useCookie from './hooks/useCookie';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import Auth from './pages/auth/Auth';
+import Home from './pages/Home/Home';
+import { useEffect, useState } from 'react';
 
 function App() {
+  const { token } = useCookie();
+  const [isLogged, setIsLogged] = useState<boolean>(false);
+
+  const handleIsLogged = (logged: boolean) => {
+    setIsLogged(logged);
+  };
+
+  useEffect(() => {
+    if (token) {
+      console.log('rendered?');
+
+      setIsLogged(true);
+    }
+  }, [isLogged, token]);
+
   return (
-    <div>
-      <Header />
-      <br />
-      <br />
-      <br />
-      <Auth />
-      <BoardsList />
-      <br />
-      <br />
-      <br />
-      <CardModal />
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={isLogged ? <Home /> : <Navigate to="/auth" />} />
+        <Route path="/auth" element={!isLogged ? <Auth handleIsLogged={handleIsLogged} /> : <Navigate to="/" />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

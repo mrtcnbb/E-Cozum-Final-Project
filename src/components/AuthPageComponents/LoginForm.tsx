@@ -1,15 +1,28 @@
 import { UnlockIcon } from '@chakra-ui/icons';
 import { Box, Button, Center, VStack } from '@chakra-ui/react';
 import React, { FC } from 'react';
+import useCookie from '../../hooks/useCookie';
+import axios from 'axios';
 import useHandleFormData from '../../hooks/useHandleFormData';
 import FormInput from './FormInput';
 
-const LoginForm: FC = () => {
+interface LoginFormProps {
+  handleIsLogged: (logged: boolean) => void;
+}
+
+const LoginForm: FC<LoginFormProps> = ({ handleIsLogged }) => {
   const { formData, handleFormData } = useHandleFormData();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log(formData);
+    axios
+      .post(`http://localhost:80/auth/login`, formData)
+      .then((response) => {
+        document.cookie = `token=${response.data.token}`;
+        handleIsLogged(true);
+      })
+      .catch((err) => console.log(err.message));
   };
 
   return (
@@ -20,11 +33,11 @@ const LoginForm: FC = () => {
         p={5}
         borderRadius="10px"
         boxShadow="lg"
-        my="36"
+        mt="24"
         bg="white"
         _hover={{ cursor: 'pointer' }}
       >
-        <form onSubmit={(e) => handleSubmit(e)}>
+        <form onSubmit={handleSubmit}>
           <VStack spacing={5}>
             <UnlockIcon color="green.500" boxSize="10" />
             <FormInput
