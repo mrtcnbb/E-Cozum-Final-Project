@@ -3,21 +3,22 @@ import useCookie from './hooks/useCookie';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import Auth from './pages/auth/Auth';
 import Home from './pages/Home/Home';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
+import { setIsLogged } from './features/authSlice';
+import { useAppDispatch, useAppSelector } from './store';
 
 function App() {
   const { token } = useCookie();
-  const [isLogged, setIsLogged] = useState<boolean>(false);
+  const authState = useAppSelector((state) => state.authState);
 
-  const handleIsLogged = (logged: boolean) => {
-    setIsLogged(logged);
-  };
+  const { isLogged } = authState;
+
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (token) {
       console.log('rendered?');
-
-      setIsLogged(true);
+      dispatch(setIsLogged(true));
     }
   }, [isLogged, token]);
 
@@ -25,7 +26,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={isLogged ? <Home /> : <Navigate to="/auth" />} />
-        <Route path="/auth" element={!isLogged ? <Auth handleIsLogged={handleIsLogged} /> : <Navigate to="/" />} />
+        <Route path="/auth" element={!isLogged ? <Auth /> : <Navigate to="/" />} />
       </Routes>
     </BrowserRouter>
   );
