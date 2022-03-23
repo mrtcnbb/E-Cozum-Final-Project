@@ -1,23 +1,62 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { Box, IconButton, Input, InputGroup, InputRightElement, Text } from '@chakra-ui/react';
 import { CheckIcon } from '@chakra-ui/icons';
+import authRequest from '../../service/authRequest';
+import { fetchBoard } from '../../features/boardSlice';
+import { useAppDispatch, useAppSelector } from '../../store';
+import { useParams } from 'react-router-dom';
 
 interface EditableTextProps {
   editItemName: boolean;
   textSize: string;
   textColor: string;
+  boardName?: string;
+  boardId?: string;
   handleEditItemName: (isEditable: boolean) => void;
 }
 
-const EditableText: FC<EditableTextProps> = ({ editItemName, textSize, textColor, handleEditItemName }) => {
-  const [listName, setListName] = useState('trial list');
+interface UpdateTitleBody {
+  title: string;
+}
 
-  const handleItemNameEntry = () => {
-    if (listName.trim() === '') {
+const EditableText: FC<EditableTextProps> = ({
+  editItemName,
+  textSize,
+  textColor,
+  boardName,
+  boardId,
+  handleEditItemName,
+}) => {
+  const { id } = useParams();
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(fetchBoard(id as string));
+  }, []);
+
+  const [listName, setListName] = useState<UpdateTitleBody>({
+    title: boardName!,
+  });
+
+  const updateTitle = (boardId: string) => {
+    authRequest()
+      .put(`board/${boardId}`, listName)
+      .then((res) => {
+        dispatch(fetchBoard(boardId!));
+      });
+  };
+
+  const handleItemNameEntry = (boardId: string) => {
+    if (listName.title.trim() === '') {
       alert('Bu alan boş bırakılamaz!');
     } else {
+      updateTitle(boardId);
       handleEditItemName(false);
     }
+  };
+
+  const onTextChange = (event: any) => {
+    setListName((prev) => ({ ...prev, title: event.target.value }));
   };
 
   return (
@@ -30,14 +69,19 @@ const EditableText: FC<EditableTextProps> = ({ editItemName, textSize, textColor
           _hover={{ cursor: 'pointer' }}
           onClick={() => handleEditItemName(true)}
         >
-          {listName}
+          {listName.title}
         </Text>
       ) : (
         <InputGroup>
-          <Input color={textColor} borderColor="black" value={listName} onChange={(e) => setListName(e.target.value)} />
+          <Input
+            color={textColor}
+            borderColor="black"
+            value={listName.title}
+            onChange={(event: any) => onTextChange(event)}
+          />
           <InputRightElement
             onClick={() => {
-              handleItemNameEntry();
+              handleItemNameEntry(id!);
             }}
           >
             <IconButton

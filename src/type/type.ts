@@ -97,7 +97,7 @@ export interface Member {
   BoardMember: BoardMember;
 }
 
-export interface Board {
+export interface BoardFromId {
   id: number;
   title: string;
   createdAt: Date;
@@ -115,4 +115,12 @@ export interface BoardFromList {
   updatedAt: Date;
   ownerId: number;
   members: any[];
+}
+
+export interface BoardFromPost {
+  id: number;
+  title: string;
+  ownerId: number;
+  updatedAt: Date;
+  createdAt: Date;
 }

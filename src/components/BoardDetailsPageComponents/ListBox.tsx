@@ -6,8 +6,8 @@ import NameSettingsHolder from './NameSettingsHolder';
 
 const ListBox: FC = () => {
   return (
-    <Box bg="#F9F9F9" borderRadius="2xl" boxShadow="sm" width={320} m={100} border="1px" borderColor="rgb(230,230,230)">
-      <Box pb="15px">
+    <Box bg="#F9F9F9" borderRadius="2xl" boxShadow="sm" width={320} border="1px" borderColor="rgb(230,230,230)">
+      <Box pb="15px" width={320}>
         <NameSettingsHolder subCompName="list" />
       </Box>
       <Box
@@ -26,21 +26,14 @@ const ListBox: FC = () => {
           },
         }}
       >
-        <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" gap="16px" py="20px">
-          <CardBox />
-          <CardBox />
-          <CardBox />
-          <CardBox />
-          <CardBox />
-          <CardBox />
-          <CardBox />
-          <CardBox />
-          <CardBox />
-          <CardBox />
-          <CardBox />
-          <CardBox />
-          <CardBox />
-        </Box>
+        <Box
+          display="flex"
+          flexDirection="column"
+          justifyContent="center"
+          alignItems="center"
+          gap="16px"
+          py="20px"
+        ></Box>
       </Box>
       <Box borderTop="1px" borderColor="rgb(230,230,230)">
         <EditableAddButton item="card" />

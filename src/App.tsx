@@ -30,7 +30,7 @@ function App() {
         <Routes>
           <Route path="/" element={isLogged ? <Home /> : <Navigate to="/auth" />} />
           <Route path="/auth" element={!isLogged ? <Auth /> : <Navigate to="/" />} />
-          <Route path="/board/:id/*" element={isLogged ? <BoardDetails /> : <Navigate to="/auth" />} />
+          <Route path="/board/:id" element={isLogged ? <BoardDetails /> : <Navigate to="/auth" />} />
         </Routes>
       </BrowserRouter>
     </CookiesProvider>

@@ -1,21 +1,67 @@
 import { AddIcon, CloseIcon } from '@chakra-ui/icons';
 import { Box, Button, IconButton, Input, InputGroup, InputRightElement } from '@chakra-ui/react';
 import { FC, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { fetchBoard } from '../../features/boardSlice';
+import authRequest from '../../service/authRequest';
+import { useAppDispatch } from '../../store';
 
 interface EditableAddButtonProps {
   item: 'list' | 'card';
 }
 
+interface CreateListProps {
+  title: string;
+  boardId: number | null;
+}
+
+interface CreateCardProps {
+  title: string;
+  listId: number | null;
+}
+
 const EditableAddButton: FC<EditableAddButtonProps> = ({ item }) => {
+  const { id } = useParams();
   const [addItem, setAddItem] = useState(false);
-  const [itemName, setItemName] = useState('');
+
+  const dispatch = useAppDispatch();
+
+  const [createListObject, setCreatelistObject] = useState<CreateListProps>({
+    title: '',
+    boardId: Number(id),
+  });
+
+  const [createCardObject, setCreateCardObject] = useState<CreateCardProps>({
+    title: '',
+    listId: null,
+  });
+
+  //TODO: CREATE LİST POST HAZIRLA
+  const createList = () => {
+    authRequest()
+      .post('list', createListObject)
+      .then((res) => {
+        dispatch(fetchBoard(id!));
+      });
+  };
 
   const handleItemNameEntry = () => {
-    if (itemName.trim() === '') {
+    if (createListObject.title.trim() === '') {
       alert('Bu alan boş bırakılamaz!');
     } else {
-      setAddItem(false);
+      if (item === 'list') {
+        createList();
+        setAddItem(false);
+      }
     }
+  };
+
+  const onListTextChange = (event: any) => {
+    setCreatelistObject((prev) => ({ ...prev, title: event.target.value }));
+  };
+
+  const onCardTextChange = (event: any) => {
+    setCreateCardObject((prev) => ({ ...prev, title: event.target.value }));
   };
 
   return (
@@ -31,7 +77,7 @@ const EditableAddButton: FC<EditableAddButtonProps> = ({ item }) => {
       borderRadius="2xl"
     >
       {!addItem ? (
-        <Box onClick={() => setAddItem(true)}>
+        <Box onClick={() => setAddItem(true)} width={320}>
           <Button
             leftIcon={
               <AddIcon
@@ -57,12 +103,17 @@ const EditableAddButton: FC<EditableAddButtonProps> = ({ item }) => {
                 width={'full'}
                 placeholder={`${item} name`}
                 borderColor="black"
-                value={itemName}
-                onChange={(e) => setItemName(e.target.value)}
+                value={item === 'list' ? createListObject.title : createCardObject.title}
+                onChange={(event: any) => {
+                  if (item === 'list') {
+                    onListTextChange(event);
+                    console.log(event.target.value);
+                  }
+                }}
               />
               <InputRightElement
                 onClick={() => {
-                  setItemName('');
+                  if (item === 'list') setCreatelistObject({ title: '', boardId: null });
                   setAddItem(false);
                 }}
               >
@@ -80,13 +131,14 @@ const EditableAddButton: FC<EditableAddButtonProps> = ({ item }) => {
           </Box>
           <Box>
             <Button
-              disabled={itemName.trim() === ''}
+              disabled={createListObject.title.trim() === ''}
               colorScheme="teal"
               variant="solid"
               borderRadius="100"
               onClick={() => {
-                handleItemNameEntry();
-                setItemName('');
+                if (item === 'list') {
+                  handleItemNameEntry();
+                }
                 setAddItem(false);
               }}
             >

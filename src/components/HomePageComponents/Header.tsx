@@ -1,14 +1,12 @@
 import { LockIcon } from '@chakra-ui/icons';
 import { Flex, Box, Avatar, Text, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
 import { FC } from 'react';
-import useCookie from '../../hooks/useCookie';
 import { useAppDispatch } from '../../store';
 import { setIsLogged } from '../../features/authSlice';
 import { useCookies } from 'react-cookie';
 import { resetState } from '../../features/boardsListSlice';
 
 const Header: FC = () => {
-  // const { username, deleteCookie } = useCookies(['token', 'username']);
   const [cookies, setCookie, removeCookie] = useCookies(['token', 'username']);
   const dispatch = useAppDispatch();
 
@@ -43,8 +41,6 @@ const Header: FC = () => {
               removeCookie('token');
               removeCookie('username');
               dispatch(resetState());
-              // document.cookie = '';
-
               dispatch(setIsLogged(false));
             }}
             icon={<LockIcon />}

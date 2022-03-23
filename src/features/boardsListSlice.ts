@@ -1,18 +1,17 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import axios from 'axios';
-import getCookie from '../getToken';
 import authRequest from '../service/authRequest';
-import { baseURL } from '../service/baseURL';
-import { BoardFromList } from '../type/type';
+import { BoardFromList, BoardFromPost } from '../type/type';
 
 interface boardsListState {
   data: BoardFromList[] | null;
+  postBoardData: number | null;
   loading: boolean;
   error: string;
 }
 
 const initialState: boardsListState = {
   data: null,
+  postBoardData: null,
   loading: false,
   error: '',
 };
@@ -22,9 +21,8 @@ export const fetchBoards = createAsyncThunk('fetchBoards', async () => {
   return response.data;
 });
 
-// create board a bak
-export const createBoard = createAsyncThunk('fetchBoards', async () => {
-  const response = await authRequest().post<any>(`board`, { title: 'Untitled Board' });
+export const createBoard = createAsyncThunk('createBoard', async () => {
+  const response = await authRequest().post<BoardFromPost>(`board`, { title: 'Untitled Board' });
   return response.data;
 });
 
@@ -51,8 +49,12 @@ const boardsListSlice = createSlice({
     });
     builder.addCase(fetchBoards.rejected, (state, action) => {
       state.loading = false;
-      state.error = "Couldn't fetch users";
+      state.error = "Couldn't fetch boards";
       state.data = null;
+    });
+    builder.addCase(createBoard.fulfilled, (state, action: PayloadAction<BoardFromPost>) => {
+      state.postBoardData = action.payload.id;
+      fetchBoards();
     });
   },
 });
