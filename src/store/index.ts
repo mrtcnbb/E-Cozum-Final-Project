@@ -1,10 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { useDispatch, TypedUseSelectorHook, useSelector } from 'react-redux';
 import authSlice from '../features/authSlice';
+import boardsListSlice from '../features/boardsListSlice';
 
 const store = configureStore({
   reducer: {
     authState: authSlice,
+    boardsList: boardsListSlice,
   },
 });
 

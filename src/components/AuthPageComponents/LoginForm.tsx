@@ -1,27 +1,33 @@
 import { UnlockIcon } from '@chakra-ui/icons';
 import { Box, Button, Center, VStack } from '@chakra-ui/react';
 import React, { FC } from 'react';
-import axios from 'axios';
 import useHandleFormData from '../../hooks/useHandleFormData';
 import FormInput from './FormInput';
 import { setIsLogged } from '../../features/authSlice';
 import { useAppDispatch } from '../../store';
+import { useCookies } from 'react-cookie';
+import authRequest from '../../service/authRequest';
 
 const LoginForm: FC = () => {
   const { formData, handleFormData } = useHandleFormData();
-
+  const [cookies, setCookie, removeCookie] = useCookies(['token', 'username']);
   const dispatch = useAppDispatch();
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log(formData);
-    axios
-      .post(`http://localhost:80/auth/login`, formData)
+    authRequest()
+      .post(`auth/login`, formData)
       .then((response) => {
-        document.cookie = `token=${response.data.token}`;
+        setCookie('token', response.data.token, { path: '/' });
+        setCookie('username', response.data.username, { path: '/' });
         dispatch(setIsLogged(true));
+        console.log(response.data.username);
       })
-      .catch((err) => console.log(err.message));
+      .catch((err) => {
+        alert('Hatalı kullanıcı adı ya da parola girişi!');
+        console.log(err.message);
+      });
   };
 
   return (

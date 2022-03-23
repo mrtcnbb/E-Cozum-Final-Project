@@ -2,13 +2,21 @@ import { FC } from 'react';
 import { Box, Text, Icon } from '@chakra-ui/react';
 import { AddIcon } from '@chakra-ui/icons';
 import { RiBarChartBoxLine } from 'react-icons/ri';
+import { useNavigate } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '../../store';
+import { createBoard } from '../../features/boardsListSlice';
 
 interface BoardCardProps {
   addBoard: boolean;
   boardName?: string;
+  boardId?: number;
 }
 
-const BoardCard: FC<BoardCardProps> = ({ addBoard, boardName }) => {
+const BoardCard: FC<BoardCardProps> = ({ addBoard, boardName, boardId }) => {
+  const boardList = useAppSelector((state) => state.boardsList);
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+
   return (
     <Box
       as="button"
@@ -28,9 +36,11 @@ const BoardCard: FC<BoardCardProps> = ({ addBoard, boardName }) => {
       p="2"
       onClick={() => {
         if (addBoard) {
-          console.log('this is add board');
+          dispatch(createBoard());
+          const path = boardList.data && boardList.data[boardList.data.length - 1].id;
+          navigate(`/board/${path}`);
         } else {
-          console.log('this is existing board');
+          navigate(`/board/${boardId}`);
         }
       }}
     >

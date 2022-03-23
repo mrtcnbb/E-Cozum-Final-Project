@@ -1,11 +1,12 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import getCookie from '../getToken';
 
-interface authSliceProps {
+interface authState {
   isLogged: boolean;
 }
 
-const initialState: authSliceProps = {
-  isLogged: false,
+const initialState: authState = {
+  isLogged: getCookie('token') ? true : false,
 };
 
 const authSlice = createSlice({
