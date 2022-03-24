@@ -1,4 +1,4 @@
-import { Box, Editable } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react';
 import { FC, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { fetchBoard } from '../../features/boardSlice';
@@ -34,7 +34,7 @@ const BoardDetails: FC = () => {
         }}
       >
         {board.data?.lists.map((item) => {
-          return <ListBox listId={item.id} listName={item.title} />;
+          return <ListBox cards={item.cards} listId={item.id} listName={item.title} />;
         })}
         <EditableAddButton item="list" />
       </Box>

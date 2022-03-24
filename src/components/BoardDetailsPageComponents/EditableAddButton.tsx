@@ -8,6 +8,7 @@ import { useAppDispatch } from '../../store';
 
 interface EditableAddButtonProps {
   item: 'list' | 'card';
+  listId?: number;
 }
 
 interface CreateListProps {
@@ -20,23 +21,22 @@ interface CreateCardProps {
   listId: number | null;
 }
 
-const EditableAddButton: FC<EditableAddButtonProps> = ({ item }) => {
+const EditableAddButton: FC<EditableAddButtonProps> = ({ item, listId }) => {
   const { id } = useParams();
   const [addItem, setAddItem] = useState(false);
 
   const dispatch = useAppDispatch();
 
-  const [createListObject, setCreatelistObject] = useState<CreateListProps>({
+  const [createListObject, setCreateListObject] = useState<CreateListProps>({
     title: '',
     boardId: Number(id),
   });
 
   const [createCardObject, setCreateCardObject] = useState<CreateCardProps>({
     title: '',
-    listId: null,
+    listId: listId!,
   });
 
-  //TODO: CREATE LİST POST HAZIRLA
   const createList = () => {
     authRequest()
       .post('list', createListObject)
@@ -45,19 +45,32 @@ const EditableAddButton: FC<EditableAddButtonProps> = ({ item }) => {
       });
   };
 
+  const createCard = () => {
+    authRequest()
+      .post('card', createCardObject)
+      .then((res) => {
+        dispatch(fetchBoard(id!));
+      });
+  };
+
   const handleItemNameEntry = () => {
-    if (createListObject.title.trim() === '') {
+    if (item === 'list' ? createListObject.title.trim() === '' : createCardObject.title.trim() === '') {
       alert('Bu alan boş bırakılamaz!');
     } else {
       if (item === 'list') {
         createList();
+        setCreateListObject((prev) => ({ ...prev, title: '' }));
+        setAddItem(false);
+      } else {
+        createCard();
+        setCreateCardObject((prev) => ({ ...prev, title: '' }));
         setAddItem(false);
       }
     }
   };
 
   const onListTextChange = (event: any) => {
-    setCreatelistObject((prev) => ({ ...prev, title: event.target.value }));
+    setCreateListObject((prev) => ({ ...prev, title: event.target.value }));
   };
 
   const onCardTextChange = (event: any) => {
@@ -96,8 +109,8 @@ const EditableAddButton: FC<EditableAddButtonProps> = ({ item }) => {
           </Button>
         </Box>
       ) : (
-        <Box display="flex" flexDirection="column" alignItems="flex-start" width="full" gap="5">
-          <Box width="full">
+        <Box display="flex" flexDirection="column" alignItems="flex-start" width={320} gap="5">
+          <Box width={'full'}>
             <InputGroup>
               <Input
                 width={'full'}
@@ -108,12 +121,14 @@ const EditableAddButton: FC<EditableAddButtonProps> = ({ item }) => {
                   if (item === 'list') {
                     onListTextChange(event);
                     console.log(event.target.value);
+                  } else {
+                    onCardTextChange(event);
                   }
                 }}
               />
               <InputRightElement
                 onClick={() => {
-                  if (item === 'list') setCreatelistObject({ title: '', boardId: null });
+                  if (item === 'list') setCreateListObject({ title: '', boardId: null });
                   setAddItem(false);
                 }}
               >
@@ -131,14 +146,13 @@ const EditableAddButton: FC<EditableAddButtonProps> = ({ item }) => {
           </Box>
           <Box>
             <Button
-              disabled={createListObject.title.trim() === ''}
+              disabled={item === 'list' ? createListObject.title.trim() === '' : createCardObject.title.trim() === ''}
               colorScheme="teal"
+              size="md"
               variant="solid"
               borderRadius="100"
               onClick={() => {
-                if (item === 'list') {
-                  handleItemNameEntry();
-                }
+                handleItemNameEntry();
                 setAddItem(false);
               }}
             >

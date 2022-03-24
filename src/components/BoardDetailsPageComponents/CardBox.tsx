@@ -2,8 +2,14 @@ import { Box, Text, Icon } from '@chakra-ui/react';
 import { BiCommentDetail, BiFile } from 'react-icons/bi';
 import MiniLabel from './MiniLabel';
 import CardTag from './CardTag';
+import { FC } from 'react';
+import { Card } from '../../features/boardSlice';
 
-function CardBox() {
+interface CardBoxProps {
+  card: Card;
+}
+
+const CardBox: FC<CardBoxProps> = ({ card }) => {
   const labels = ['red', 'blue', 'orange', 'green'];
   return (
     <Box bg="#F9F9F9" borderRadius="2xl" boxShadow="sm" width={286} m={5} border="1px" borderColor="rgb(230,230,230)">
@@ -13,7 +19,7 @@ function CardBox() {
             return <MiniLabel labelColor={item} key={item} />;
           })}
         </Box>
-        <Text my="18px">Card Title</Text>
+        <Text my="18px">{card.title}</Text>
         <Box display="flex" justifyContent="start" gap="5px">
           <CardTag tagType="dueDate" test="test" />
           <CardTag tagType="checkRatio" test="test" />
@@ -41,6 +47,6 @@ function CardBox() {
       </Box>
     </Box>
   );
-}
+};
 
 export default CardBox;
