@@ -27,7 +27,7 @@ const NameSettingsHolder: FC<NameSettingsHolderProps> = ({ subCompName, listId, 
         listId={listId}
         item={'list'}
       />
-      <SubCompSettingsMenu subCompName={subCompName} handleEditListName={handleEditItemName} />
+      <SubCompSettingsMenu listId={listId} subCompName={subCompName} handleEditListName={handleEditItemName} />
     </Flex>
   );
 };
