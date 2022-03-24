@@ -5,9 +5,11 @@ import SubCompSettingsMenu from './SubCompSettingsMenu';
 
 interface NameSettingsHolderProps {
   subCompName: string;
+  listId: number;
+  listName: string;
 }
 
-const NameSettingsHolder: FC<NameSettingsHolderProps> = ({ subCompName }) => {
+const NameSettingsHolder: FC<NameSettingsHolderProps> = ({ subCompName, listId, listName }) => {
   const [editItemName, setEditItemName] = useState(false);
 
   const handleEditItemName = (isEditable: boolean) => {
@@ -21,6 +23,9 @@ const NameSettingsHolder: FC<NameSettingsHolderProps> = ({ subCompName }) => {
         textSize="md"
         editItemName={editItemName}
         handleEditItemName={handleEditItemName}
+        listName={listName}
+        listId={listId}
+        item={'list'}
       />
       <SubCompSettingsMenu subCompName={subCompName} handleEditListName={handleEditItemName} />
     </Flex>

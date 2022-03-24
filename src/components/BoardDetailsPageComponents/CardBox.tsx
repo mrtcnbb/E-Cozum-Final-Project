@@ -6,7 +6,7 @@ import CardTag from './CardTag';
 function CardBox() {
   const labels = ['red', 'blue', 'orange', 'green'];
   return (
-    <Box bg="#F9F9F9" borderRadius="2xl" boxShadow="sm" width={286} m={100} border="1px" borderColor="rgb(230,230,230)">
+    <Box bg="#F9F9F9" borderRadius="2xl" boxShadow="sm" width={286} m={5} border="1px" borderColor="rgb(230,230,230)">
       <Box p="15px">
         <Box display="flex" gap={2}>
           {labels.map((item: string) => {

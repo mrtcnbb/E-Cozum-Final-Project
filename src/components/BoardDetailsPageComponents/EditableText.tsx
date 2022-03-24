@@ -12,11 +12,19 @@ interface EditableTextProps {
   textColor: string;
   boardName?: string;
   boardId?: string;
+  listName?: string;
+  listId?: number;
+  item?: string;
   handleEditItemName: (isEditable: boolean) => void;
 }
 
-interface UpdateTitleBody {
+interface UpdateBoardTitleBody {
   title: string;
+}
+
+interface UpdateListTitleBody {
+  title: string;
+  boardId: number;
 }
 
 const EditableText: FC<EditableTextProps> = ({
@@ -25,6 +33,9 @@ const EditableText: FC<EditableTextProps> = ({
   textColor,
   boardName,
   boardId,
+  listName,
+  listId,
+  item,
   handleEditItemName,
 }) => {
   const { id } = useParams();
@@ -34,29 +45,57 @@ const EditableText: FC<EditableTextProps> = ({
     dispatch(fetchBoard(id as string));
   }, []);
 
-  const [listName, setListName] = useState<UpdateTitleBody>({
+  const board = useAppSelector((state) => state.boardState);
+
+  const [boardsName, setBoardsName] = useState<UpdateBoardTitleBody>({
     title: boardName!,
   });
 
-  const updateTitle = (boardId: string) => {
+  const [listsName, setListsName] = useState<UpdateListTitleBody>({
+    title: listName!,
+    boardId: Number(id),
+  });
+
+  const updateBoardTitle = (boardId: string) => {
     authRequest()
-      .put(`board/${boardId}`, listName)
+      .put(`board/${boardId}`, boardsName)
       .then((res) => {
         dispatch(fetchBoard(boardId!));
       });
   };
 
-  const handleItemNameEntry = (boardId: string) => {
-    if (listName.title.trim() === '') {
+  const updateListTitle = (listId: number) => {
+    authRequest()
+      .put(`list/${listId}`, listsName)
+      .then((res) => {
+        dispatch(fetchBoard(boardId!));
+      });
+  };
+
+  const handleBoardNameEntry = (boardId: string) => {
+    if (boardsName.title.trim() === '') {
       alert('Bu alan boş bırakılamaz!');
     } else {
-      updateTitle(boardId);
+      updateBoardTitle(boardId);
       handleEditItemName(false);
     }
   };
 
-  const onTextChange = (event: any) => {
-    setListName((prev) => ({ ...prev, title: event.target.value }));
+  const handleListNameEntry = (listId: number) => {
+    if (listsName.title.trim() === '') {
+      alert('Bu alan boş bırakılamaz!');
+    } else {
+      updateListTitle(listId!);
+      handleEditItemName(false);
+    }
+  };
+
+  const onBoardTextChange = (event: any) => {
+    setBoardsName((prev) => ({ ...prev, title: event.target.value }));
+  };
+
+  const onListTextChange = (event: any) => {
+    setListsName((prev) => ({ ...prev, title: event.target.value }));
   };
 
   return (
@@ -69,19 +108,29 @@ const EditableText: FC<EditableTextProps> = ({
           _hover={{ cursor: 'pointer' }}
           onClick={() => handleEditItemName(true)}
         >
-          {listName.title}
+          {item === 'list' ? listsName.title : boardsName.title}
         </Text>
       ) : (
         <InputGroup>
           <Input
             color={textColor}
             borderColor="black"
-            value={listName.title}
-            onChange={(event: any) => onTextChange(event)}
+            value={item === 'list' ? listsName.title : boardsName.title}
+            onChange={(event: any) => {
+              if (item === 'list') {
+                onListTextChange(event);
+              } else {
+                onBoardTextChange(event);
+              }
+            }}
           />
           <InputRightElement
             onClick={() => {
-              handleItemNameEntry(id!);
+              if (item === 'list') {
+                handleListNameEntry(listId!);
+              } else {
+                handleBoardNameEntry(id!);
+              }
             }}
           >
             <IconButton

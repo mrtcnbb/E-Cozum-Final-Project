@@ -6,12 +6,33 @@ import {
   DrawerOverlay,
   IconButton,
   useDisclosure,
+  Text,
 } from '@chakra-ui/react';
 import { SettingsIcon } from '@chakra-ui/icons';
 import { FC } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import authRequest from '../../service/authRequest';
+import { useAppDispatch } from '../../store';
+import { fetchBoards } from '../../features/boardsListSlice';
 
 const BoardDetailsDrawer: FC = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const { id } = useParams();
+
+  const disptach = useAppDispatch();
+
+  const navigate = useNavigate();
+
+  const deleteBoard = (id: string) => {
+    authRequest()
+      .delete(`board/${id}`)
+      .then((res) => {
+        disptach(fetchBoards());
+        navigate('/');
+      });
+  };
+
   return (
     <>
       <IconButton
@@ -30,7 +51,9 @@ const BoardDetailsDrawer: FC = () => {
             Settings
           </DrawerHeader>
           <DrawerBody>
-            <p>Some contents...</p>
+            <Text _hover={{ cursor: 'pointer' }} onClick={() => deleteBoard(id!)}>
+              Delete this board
+            </Text>
             <p>Some contents...</p>
             <p>Some contents...</p>
           </DrawerBody>

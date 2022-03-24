@@ -34,7 +34,7 @@ const BoardDetails: FC = () => {
         }}
       >
         {board.data?.lists.map((item) => {
-          return <ListBox />;
+          return <ListBox listId={item.id} listName={item.title} />;
         })}
         <EditableAddButton item="list" />
       </Box>
