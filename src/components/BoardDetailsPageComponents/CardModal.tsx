@@ -27,6 +27,7 @@ import {
   PopoverContent,
   PopoverHeader,
   PopoverTrigger,
+  useToast,
 } from '@chakra-ui/react';
 import { BiCalendar, BiLabel, BiCheckSquare, BiDotsHorizontalRounded, BiX } from 'react-icons/bi';
 import React, { FC, useState } from 'react';
@@ -64,11 +65,18 @@ const CardModal: FC<CardModalProps> = ({ card, openModal, listName, boardName, h
     listId: card.listId,
   });
 
+  const [createCommentObject, setCreateCommentObject] = useState({
+    cardId: card.id,
+    message: '',
+  });
+
   const dispatch = useAppDispatch();
 
   const theDueDate = format(new Date(startDate), 'MMM dd yyyy');
 
   const arrayOfLabels = ['High Priority', 'App', 'Feature', 'Design'];
+
+  const toast = useToast();
 
   const onCardTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUpdateCardObject((prev) => ({ ...prev, title: event.target.value }));
@@ -78,11 +86,29 @@ const CardModal: FC<CardModalProps> = ({ card, openModal, listName, boardName, h
     setUpdateCardObject((prev) => ({ ...prev, description: event.target.value }));
   };
 
+  const onCardCommentChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setCreateCommentObject((prev) => ({ ...prev, message: event.target.value }));
+  };
+
   const updateCardTitleDescriptionDueDate = () => {
     authRequest()
       .put(`card/${card.id}`, updateCardObject)
       .then(() => {
         dispatch(fetchBoard(id!));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const createCardComment = () => {
+    authRequest()
+      .post(`comment`, createCommentObject)
+      .then(() => {
+        dispatch(fetchBoard(id!));
+      })
+      .catch((error) => {
+        console.log(error);
       });
   };
 
@@ -298,7 +324,7 @@ const CardModal: FC<CardModalProps> = ({ card, openModal, listName, boardName, h
               </Box>
             </Box>
 
-            {/* <Box id="COMMENT ENTRY" display="flex" flexDirection="column" gap="5px">
+            <Box id="COMMENT ENTRY" display="flex" flexDirection="column" gap="5px">
               <CardModalSection iconType="BiCommentDetail" sectionName="Comment" />
               <Box display="flex" flexDirection="row" alignItems="flex-start" gap="15px">
                 <Box>
@@ -309,24 +335,25 @@ const CardModal: FC<CardModalProps> = ({ card, openModal, listName, boardName, h
                     placeholder="Add comment"
                     size="lg"
                     fontSize="sm"
-                    value={itemName}
-                    onChange={(e) => setItemName(e.currentTarget.value)}
+                    value={createCommentObject.message}
+                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => onCardCommentChange(event)}
                   />
                   <Button
-                    disabled={itemName.trim() === ''}
+                    disabled={createCommentObject.message.trim() === ''}
                     colorScheme="teal"
                     variant="solid"
                     borderRadius="100"
                     size="sm"
                     onClick={() => {
-                      setItemName('');
+                      createCardComment();
+                      setCreateCommentObject((prev) => ({ ...prev, message: '' }));
                     }}
                   >
                     Save
                   </Button>
                 </Box>
               </Box>
-            </Box> */}
+            </Box>
           </ModalBody>
         </ModalContent>
       </Modal>

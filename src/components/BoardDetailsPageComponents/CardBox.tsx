@@ -1,4 +1,4 @@
-import { Box, Text, Icon, Button } from '@chakra-ui/react';
+import { Box, Text, Icon } from '@chakra-ui/react';
 import { BiCommentDetail, BiFile } from 'react-icons/bi';
 import MiniLabel from './MiniLabel';
 import CardTag from './CardTag';
@@ -72,12 +72,14 @@ const CardBox: FC<CardBoxProps> = ({ cardProp, cardId, listId, listName, boardNa
         borderColor="rgb(230,230,230)"
       >
         <Box>{card?.description && <Icon boxSize={4} as={BiFile} />}</Box>
-        <Box display="flex" justifyContent="space-between" alignItems="center" width="30px">
-          <Icon boxSize={4} mt="2px" as={BiCommentDetail} />
-          <Text fontSize="xs" display="inline-block" lineHeight="0">
-            2
-          </Text>
-        </Box>
+        {card?.comments.length !== 0 && (
+          <Box display="flex" justifyContent="space-between" alignItems="center" width="30px">
+            <Icon boxSize={4} mt="2px" as={BiCommentDetail} />
+            <Text fontSize="xs" display="inline-block" lineHeight="0">
+              {card?.comments.length}
+            </Text>
+          </Box>
+        )}
       </Box>
       <CardModal card={card!} openModal={isModalOpen} handleClose={onClose} listName={listName} boardName={boardName} />
     </Box>
