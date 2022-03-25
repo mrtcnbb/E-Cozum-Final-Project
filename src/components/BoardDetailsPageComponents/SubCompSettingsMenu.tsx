@@ -1,10 +1,8 @@
 import { EditIcon, DeleteIcon } from '@chakra-ui/icons';
 import { Menu, MenuButton, Icon, IconButton, MenuList, MenuItem } from '@chakra-ui/react';
-import { RiMore2Line } from 'react-icons/ri';
 import { FC } from 'react';
 import authRequest from '../../service/authRequest';
-import { useAppDispatch } from '../../store';
-import { fetchBoards } from '../../features/boardsListSlice';
+import { BiDotsVerticalRounded } from 'react-icons/bi';
 
 interface SubCompSettingsMenuProps {
   subCompName: string;
@@ -13,13 +11,12 @@ interface SubCompSettingsMenuProps {
 }
 
 const SubCompSettingsMenu: FC<SubCompSettingsMenuProps> = ({ subCompName, listId, handleEditListName }) => {
-  const disptach = useAppDispatch();
-
   const deleteList = (listId: number) => {
     authRequest()
       .delete(`list/${listId}`)
-      .then((res) => {
-        disptach(fetchBoards());
+      .then()
+      .catch((error) => {
+        console.log(error);
       });
   };
 
@@ -31,7 +28,8 @@ const SubCompSettingsMenu: FC<SubCompSettingsMenuProps> = ({ subCompName, listId
         size="sm"
         variant="none"
         mt={3}
-        icon={<Icon as={RiMore2Line} />}
+        _focus={{ outline: '0' }}
+        icon={<Icon as={BiDotsVerticalRounded} />}
       />
       <MenuList>
         <MenuItem onClick={() => deleteList(listId!)} icon={<DeleteIcon />}>

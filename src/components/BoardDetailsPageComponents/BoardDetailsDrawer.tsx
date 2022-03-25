@@ -7,30 +7,55 @@ import {
   IconButton,
   useDisclosure,
   Text,
+  Input,
+  Button,
 } from '@chakra-ui/react';
 import { SettingsIcon } from '@chakra-ui/icons';
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import authRequest from '../../service/authRequest';
-import { useAppDispatch } from '../../store';
-import { fetchBoards } from '../../features/boardsListSlice';
+import { useAppSelector } from '../../store';
+
+interface CreateMemberProps {
+  username: string;
+  boardId: number;
+}
 
 const BoardDetailsDrawer: FC = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const { id } = useParams();
 
-  const disptach = useAppDispatch();
-
   const navigate = useNavigate();
+
+  const [createBoardMemberObject, setCreateBoardMemberObject] = useState<CreateMemberProps>({
+    username: '',
+    boardId: Number(id!),
+  });
+
+  const board = useAppSelector((state) => state.boardState);
 
   const deleteBoard = (id: string) => {
     authRequest()
       .delete(`board/${id}`)
       .then((res) => {
-        disptach(fetchBoards());
         navigate('/');
       });
+  };
+
+  const addMember = () => {
+    authRequest()
+      .post('board-member', createBoardMemberObject)
+      .then((res) => {
+        console.log(createBoardMemberObject);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const onMemberTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setCreateBoardMemberObject((prev) => ({ ...prev, username: event.target.value }));
   };
 
   return (
@@ -54,8 +79,23 @@ const BoardDetailsDrawer: FC = () => {
             <Text _hover={{ cursor: 'pointer' }} onClick={() => deleteBoard(id!)}>
               Delete this board
             </Text>
-            <p>Some contents...</p>
-            <p>Some contents...</p>
+            <Text>Add members to this board:</Text>
+            <Input onChange={(event: React.ChangeEvent<HTMLInputElement>) => onMemberTextChange(event)} />
+            <Button
+              // disabled={createBoardMemberObject.username.trim() === ''}
+              colorScheme="teal"
+              size="sm"
+              variant="solid"
+              borderRadius="100"
+              onClick={() => {
+                addMember();
+              }}
+            >
+              Add
+            </Button>
+            {board.data?.members.map((item) => {
+              return <Text key={item.id}>{item.username}</Text>;
+            })}
           </DrawerBody>
         </DrawerContent>
       </Drawer>

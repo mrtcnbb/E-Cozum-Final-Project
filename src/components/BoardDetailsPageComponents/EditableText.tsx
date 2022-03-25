@@ -1,9 +1,7 @@
-import React, { FC, useEffect, useState } from 'react';
+import { FC, useState } from 'react';
 import { Box, IconButton, Input, InputGroup, InputRightElement, Text } from '@chakra-ui/react';
 import { CheckIcon } from '@chakra-ui/icons';
 import authRequest from '../../service/authRequest';
-import { fetchBoard } from '../../features/boardSlice';
-import { useAppDispatch, useAppSelector } from '../../store';
 import { useParams } from 'react-router-dom';
 
 interface EditableTextProps {
@@ -39,13 +37,6 @@ const EditableText: FC<EditableTextProps> = ({
   handleEditItemName,
 }) => {
   const { id } = useParams();
-  const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    dispatch(fetchBoard(id as string));
-  }, []);
-
-  const board = useAppSelector((state) => state.boardState);
 
   const [boardsName, setBoardsName] = useState<UpdateBoardTitleBody>({
     title: boardName!,
@@ -59,16 +50,18 @@ const EditableText: FC<EditableTextProps> = ({
   const updateBoardTitle = (boardId: string) => {
     authRequest()
       .put(`board/${boardId}`, boardsName)
-      .then((res) => {
-        dispatch(fetchBoard(boardId!));
+      .then()
+      .catch((error) => {
+        console.log(error);
       });
   };
 
   const updateListTitle = (listId: number) => {
     authRequest()
       .put(`list/${listId}`, listsName)
-      .then((res) => {
-        dispatch(fetchBoard(boardId!));
+      .then()
+      .catch((error) => {
+        console.log(error);
       });
   };
 

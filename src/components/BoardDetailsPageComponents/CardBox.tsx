@@ -4,6 +4,7 @@ import MiniLabel from './MiniLabel';
 import CardTag from './CardTag';
 import { FC } from 'react';
 import { Card } from '../../features/boardSlice';
+import CardModal from './CardModal';
 
 interface CardBoxProps {
   card: Card;
@@ -45,6 +46,7 @@ const CardBox: FC<CardBoxProps> = ({ card }) => {
           </Text>
         </Box>
       </Box>
+      <CardModal card={card} />
     </Box>
   );
 };

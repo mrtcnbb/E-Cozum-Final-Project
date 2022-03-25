@@ -4,7 +4,7 @@ import { AddIcon } from '@chakra-ui/icons';
 import { RiBarChartBoxLine } from 'react-icons/ri';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../store';
-import { createBoard, fetchBoards } from '../../features/boardsListSlice';
+import { createBoard } from '../../features/boardsListSlice';
 
 interface BoardCardProps {
   addBoard: boolean;

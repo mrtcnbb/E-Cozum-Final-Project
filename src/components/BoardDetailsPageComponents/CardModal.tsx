@@ -29,7 +29,7 @@ import {
   PopoverTrigger,
 } from '@chakra-ui/react';
 import { BiCalendar, BiLabel, BiCheckSquare, BiDotsHorizontalRounded, BiX } from 'react-icons/bi';
-import React, { useState } from 'react';
+import React, { FC, useState } from 'react';
 import { ChevronRightIcon } from '@chakra-ui/icons';
 
 import DatePicker from 'react-datepicker';
@@ -37,8 +37,13 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { format } from 'date-fns';
 import CardModalLabel from './CardModalLabel';
 import CardModalSection from './CardModalSection';
+import { Card } from '../../features/boardSlice';
 
-export default function CardModal() {
+interface CardModalProps {
+  card: Card;
+}
+
+const CardModal: FC<CardModalProps> = ({ card }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [itemName, setItemName] = useState('');
   const [startDate, setStartDate] = useState<Date>(new Date());
@@ -224,7 +229,7 @@ export default function CardModal() {
             </Box>
 
             <Box id="CARD TITLE INPUT">
-              <Input placeholder="Title*" size="lg" fontSize="sm" />
+              <Input placeholder="Title*" size="lg" fontSize="sm" value={card.title} />
             </Box>
 
             <Box id="CARD DESCRIPTION TEXTAREA">
@@ -284,4 +289,6 @@ export default function CardModal() {
       </Modal>
     </>
   );
-}
+};
+
+export default CardModal;

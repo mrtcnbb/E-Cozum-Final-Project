@@ -2,9 +2,7 @@ import { AddIcon, CloseIcon } from '@chakra-ui/icons';
 import { Box, Button, IconButton, Input, InputGroup, InputRightElement } from '@chakra-ui/react';
 import { FC, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { fetchBoard } from '../../features/boardSlice';
 import authRequest from '../../service/authRequest';
-import { useAppDispatch } from '../../store';
 
 interface EditableAddButtonProps {
   item: 'list' | 'card';
@@ -25,8 +23,6 @@ const EditableAddButton: FC<EditableAddButtonProps> = ({ item, listId }) => {
   const { id } = useParams();
   const [addItem, setAddItem] = useState(false);
 
-  const dispatch = useAppDispatch();
-
   const [createListObject, setCreateListObject] = useState<CreateListProps>({
     title: '',
     boardId: Number(id),
@@ -40,16 +36,18 @@ const EditableAddButton: FC<EditableAddButtonProps> = ({ item, listId }) => {
   const createList = () => {
     authRequest()
       .post('list', createListObject)
-      .then((res) => {
-        dispatch(fetchBoard(id!));
+      .then()
+      .catch((error) => {
+        console.log(error);
       });
   };
 
   const createCard = () => {
     authRequest()
       .post('card', createCardObject)
-      .then((res) => {
-        dispatch(fetchBoard(id!));
+      .then()
+      .catch((error) => {
+        console.log(error);
       });
   };
 
@@ -148,7 +146,7 @@ const EditableAddButton: FC<EditableAddButtonProps> = ({ item, listId }) => {
             <Button
               disabled={item === 'list' ? createListObject.title.trim() === '' : createCardObject.title.trim() === ''}
               colorScheme="teal"
-              size="md"
+              size="sm"
               variant="solid"
               borderRadius="100"
               onClick={() => {
