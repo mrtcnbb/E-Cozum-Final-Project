@@ -58,7 +58,7 @@ export interface Label {
   CardLabel: CardLabel;
 }
 
-export interface Item {
+export interface ChecklistItem {
   id: number;
   title: string;
   isChecked: boolean;
@@ -73,7 +73,7 @@ export interface Checklist {
   createdAt: Date;
   updatedAt: Date;
   cardId: number;
-  items: Item[];
+  items: ChecklistItem[];
 }
 
 export interface Author {

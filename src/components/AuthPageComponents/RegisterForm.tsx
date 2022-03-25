@@ -33,7 +33,7 @@ const RegisterForm: FC = () => {
 
   return (
     <Center>
-      <Box border="1px" borderColor="gray.200" p={5} borderRadius="10px" boxShadow="lg" mt="24" bg="white">
+      <Box width={'md'} border="1px" borderColor="gray.200" p={5} borderRadius="10px" boxShadow="lg" mt="24" bg="white">
         <form onSubmit={(e) => handleSubmit(e)}>
           <VStack spacing={5}>
             <CheckCircleIcon color="blue.500" boxSize="10" />

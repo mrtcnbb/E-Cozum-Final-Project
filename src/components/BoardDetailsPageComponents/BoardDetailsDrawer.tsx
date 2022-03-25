@@ -14,7 +14,8 @@ import { SettingsIcon } from '@chakra-ui/icons';
 import { FC, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import authRequest from '../../service/authRequest';
-import { useAppSelector } from '../../store';
+import { useAppDispatch, useAppSelector } from '../../store';
+import { fetchBoard } from '../../features/boardSlice';
 
 interface CreateMemberProps {
   username: string;
@@ -27,6 +28,8 @@ const BoardDetailsDrawer: FC = () => {
   const { id } = useParams();
 
   const navigate = useNavigate();
+
+  const dispatch = useAppDispatch();
 
   const [createBoardMemberObject, setCreateBoardMemberObject] = useState<CreateMemberProps>({
     username: '',
@@ -47,6 +50,7 @@ const BoardDetailsDrawer: FC = () => {
     authRequest()
       .post('board-member', createBoardMemberObject)
       .then((res) => {
+        dispatch(fetchBoard(id!));
         console.log(createBoardMemberObject);
       })
       .catch((error) => {

@@ -3,14 +3,14 @@ import { useDispatch, TypedUseSelectorHook, useSelector } from 'react-redux';
 import authSlice from '../features/authSlice';
 import boardSlice from '../features/boardSlice';
 import boardsListSlice from '../features/boardsListSlice';
-import listSlice from '../features/listSlice';
+import triggerSlice from '../features/triggerSlice';
 
 const store = configureStore({
   reducer: {
     authState: authSlice,
     boardsList: boardsListSlice,
     boardState: boardSlice,
-    listState: listSlice,
+    triggerState: triggerSlice,
   },
 });
 

@@ -11,11 +11,12 @@ import ListBox from './ListBox';
 const BoardDetails: FC = () => {
   const { id } = useParams();
   const board = useAppSelector((state) => state.boardState);
+  const trigger = useAppSelector((state) => state.triggerState);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch(fetchBoard(id as string));
-  }, [board, dispatch, id]);
+  }, [dispatch, id]);
 
   return (
     <Box>
@@ -34,7 +35,7 @@ const BoardDetails: FC = () => {
         }}
       >
         {board.data?.lists.map((item) => {
-          return <ListBox cards={item.cards} listId={item.id} listName={item.title} />;
+          return <ListBox key={item.id} cards={item.cards} listId={item.id} listName={item.title} />;
         })}
         <EditableAddButton item="list" />
       </Box>

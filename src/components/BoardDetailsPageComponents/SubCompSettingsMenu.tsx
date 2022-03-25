@@ -3,6 +3,10 @@ import { Menu, MenuButton, Icon, IconButton, MenuList, MenuItem } from '@chakra-
 import { FC } from 'react';
 import authRequest from '../../service/authRequest';
 import { BiDotsVerticalRounded } from 'react-icons/bi';
+import { useAppDispatch, useAppSelector } from '../../store';
+import { setIsTriggered } from '../../features/triggerSlice';
+import { fetchBoard } from '../../features/boardSlice';
+import { useParams } from 'react-router-dom';
 
 interface SubCompSettingsMenuProps {
   subCompName: string;
@@ -11,10 +15,18 @@ interface SubCompSettingsMenuProps {
 }
 
 const SubCompSettingsMenu: FC<SubCompSettingsMenuProps> = ({ subCompName, listId, handleEditListName }) => {
+  const { id } = useParams();
+
+  const trigger = useAppSelector((state) => state.triggerState);
+
+  const dispatch = useAppDispatch();
+
   const deleteList = (listId: number) => {
     authRequest()
       .delete(`list/${listId}`)
-      .then()
+      .then((res) => {
+        dispatch(fetchBoard(id!));
+      })
       .catch((error) => {
         console.log(error);
       });

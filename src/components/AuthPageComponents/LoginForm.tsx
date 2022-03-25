@@ -33,6 +33,7 @@ const LoginForm: FC = () => {
   return (
     <Center>
       <Box
+        width={'md'}
         border="1px"
         borderColor="gray.200"
         p={5}

@@ -5,6 +5,7 @@ import { RiBarChartBoxLine } from 'react-icons/ri';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../store';
 import { createBoard } from '../../features/boardsListSlice';
+import { fetchBoard } from '../../features/boardSlice';
 
 interface BoardCardProps {
   addBoard: boolean;
@@ -35,10 +36,14 @@ const BoardCard: FC<BoardCardProps> = ({ addBoard, boardName, boardId }) => {
       flexDirection="column"
       p="2"
       onClick={() => {
+        // debugger;
         if (addBoard) {
-          dispatch(createBoard());
-          const path = boardList.data && boardList.data[boardList.data.length - 1].id;
-          navigate(`/board/${path}`);
+          (async () => {
+            await dispatch(createBoard());
+            const path = boardList.data && boardList.data[boardList.data.length - 1].id;
+            const newPath = boardList.postBoardData;
+            navigate(`/board/${newPath}`);
+          })();
         } else {
           navigate(`/board/${boardId}`);
         }
