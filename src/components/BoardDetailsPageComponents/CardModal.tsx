@@ -28,9 +28,10 @@ import {
   PopoverHeader,
   PopoverTrigger,
   useToast,
+  VStack,
 } from '@chakra-ui/react';
 import { BiCalendar, BiLabel, BiCheckSquare, BiDotsHorizontalRounded, BiX } from 'react-icons/bi';
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { ChevronRightIcon } from '@chakra-ui/icons';
 
 import DatePicker from 'react-datepicker';
@@ -40,8 +41,9 @@ import CardModalLabel from './CardModalLabel';
 import CardModalSection from './CardModalSection';
 import { Card, fetchBoard } from '../../features/boardSlice';
 import authRequest from '../../service/authRequest';
-import { useAppDispatch } from '../../store';
+import { useAppDispatch, useAppSelector } from '../../store';
 import { useParams } from 'react-router-dom';
+import { fetchLabels } from '../../features/labelsListSlice';
 
 interface CardModalProps {
   card: Card;
@@ -71,6 +73,12 @@ const CardModal: FC<CardModalProps> = ({ card, openModal, listName, boardName, h
   });
 
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(fetchLabels());
+  }, [dispatch]);
+
+  const labels = useAppSelector((state) => state.labelsList);
 
   const theDueDate = format(new Date(startDate), 'MMM dd yyyy');
 
@@ -168,29 +176,18 @@ const CardModal: FC<CardModalProps> = ({ card, openModal, listName, boardName, h
                 </MenuButton>
                 <MenuList fontSize="sm">
                   <MenuItem closeOnSelect={false}>
-                    <CheckboxGroup colorScheme="teal" defaultValue={['naruto', 'kakashi']}>
-                      <Stack spacing={[1, 5]} direction={['column']}>
-                        <Checkbox value="naruto" onChange={(e) => console.log(e.currentTarget.value)}>
-                          <Box display="flex" justifyContent="space-between" alignItems="center">
-                            <Text>Naruto</Text> <Icon as={BiLabel} fontSize="2xl" pl="auto" />
-                          </Box>
-                        </Checkbox>
-                        <Checkbox value="sasuke">
-                          <Box display="flex" justifyContent="space-between" alignItems="center">
-                            <Text>Naruto</Text> <Icon as={BiLabel} fontSize="2xl" pl="auto" />
-                          </Box>
-                        </Checkbox>
-                        <Checkbox value="kakashi">
-                          <Box display="flex" justifyContent="space-between" alignItems="center">
-                            <Text>Naruto</Text> <Icon as={BiLabel} fontSize="2xl" pl="auto" />
-                          </Box>
-                        </Checkbox>
-                        <Checkbox value="takashi">
-                          <Box display="flex" justifyContent="space-between" alignItems="center">
-                            <Text>Naruto</Text> <Icon as={BiLabel} fontSize="2xl" pl="auto" />
-                          </Box>
-                        </Checkbox>
-                      </Stack>
+                    <CheckboxGroup colorScheme="teal" defaultValue={[]}>
+                      <Box display={'flex'} flexDirection="column" gap="10px">
+                        {labels.data?.map((item) => {
+                          return (
+                            <Checkbox value={item.title} onChange={(e) => console.log(e.currentTarget.value)}>
+                              <Box display="flex" justifyContent="space-between" alignItems="center">
+                                <Text>{item.title}</Text> <Icon as={BiLabel} fontSize="2xl" pl="auto" />
+                              </Box>
+                            </Checkbox>
+                          );
+                        })}
+                      </Box>
                     </CheckboxGroup>
                   </MenuItem>
                 </MenuList>

@@ -3,6 +3,7 @@ import { useDispatch, TypedUseSelectorHook, useSelector } from 'react-redux';
 import authSlice from '../features/authSlice';
 import boardSlice from '../features/boardSlice';
 import boardsListSlice from '../features/boardsListSlice';
+import labelsListSlice from '../features/labelsListSlice';
 import triggerSlice from '../features/triggerSlice';
 
 const store = configureStore({
@@ -11,6 +12,7 @@ const store = configureStore({
     boardsList: boardsListSlice,
     boardState: boardSlice,
     triggerState: triggerSlice,
+    labelsList: labelsListSlice,
   },
 });
 

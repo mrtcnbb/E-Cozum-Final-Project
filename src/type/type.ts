@@ -15,6 +15,14 @@ export interface Label {
   CardLabel: CardLabel;
 }
 
+export interface LabelFromList {
+  id: number;
+  title: string;
+  color: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 export interface Item {
   id: number;
   title: string;
