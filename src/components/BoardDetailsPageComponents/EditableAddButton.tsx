@@ -19,6 +19,7 @@ interface CreateListProps {
 interface CreateCardProps {
   title: string;
   listId: number | null;
+  description: string;
 }
 
 const EditableAddButton: FC<EditableAddButtonProps> = ({ item, listId }) => {
@@ -35,6 +36,7 @@ const EditableAddButton: FC<EditableAddButtonProps> = ({ item, listId }) => {
   const [createCardObject, setCreateCardObject] = useState<CreateCardProps>({
     title: '',
     listId: listId!,
+    description: '',
   });
 
   const createList = () => {

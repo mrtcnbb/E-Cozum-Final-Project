@@ -37,46 +37,58 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { format } from 'date-fns';
 import CardModalLabel from './CardModalLabel';
 import CardModalSection from './CardModalSection';
-import { Card } from '../../features/boardSlice';
+import { Card, fetchBoard } from '../../features/boardSlice';
+import authRequest from '../../service/authRequest';
+import { useAppDispatch } from '../../store';
+import { useParams } from 'react-router-dom';
 
 interface CardModalProps {
   card: Card;
+  openModal: boolean;
+  listName: string;
+  boardName: string;
+  handleClose: () => void;
 }
 
-const CardModal: FC<CardModalProps> = ({ card }) => {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
+const CardModal: FC<CardModalProps> = ({ card, openModal, listName, boardName, handleClose }) => {
   const [itemName, setItemName] = useState('');
   const [startDate, setStartDate] = useState<Date>(new Date());
   const [cheklistName, setcheklistName] = useState('');
   const [dueDate, setDueDate] = useState(false);
 
+  const { id } = useParams();
+
+  const [updateCardObject, setUpdateCardObject] = useState({
+    title: card.title!,
+    description: card.description!,
+    listId: card.listId,
+  });
+
+  const dispatch = useAppDispatch();
+
   const theDueDate = format(new Date(startDate), 'MMM dd yyyy');
-
-  console.log('theDueDate :>> ', theDueDate);
-
-  const onOpen = () => {
-    setIsOpen(!isOpen);
-  };
-
-  const onClose = () => {
-    setIsOpen(!isOpen);
-  };
 
   const arrayOfLabels = ['High Priority', 'App', 'Feature', 'Design'];
 
-  const btnRef = React.useRef<HTMLButtonElement>(null);
-  const divRef = React.useRef<HTMLDivElement>(null);
+  const onCardTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setUpdateCardObject((prev) => ({ ...prev, title: event.target.value }));
+  };
+
+  const onCardDescriptionChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setUpdateCardObject((prev) => ({ ...prev, description: event.target.value }));
+  };
+
+  const updateCardTitleDescriptionDueDate = () => {
+    authRequest()
+      .put(`card/${card.id}`, updateCardObject)
+      .then(() => {
+        dispatch(fetchBoard(id!));
+      });
+  };
+
   return (
     <>
-      <Button my={130} ref={btnRef} onClick={onOpen}>
-        Trigger modal
-      </Button>
-
-      <Box ref={divRef} onClick={onOpen}>
-        Trigger Modal
-      </Box>
-
-      <Modal onClose={onClose} finalFocusRef={btnRef} isOpen={isOpen} scrollBehavior={'inside'} size="3xl">
+      <Modal onClose={() => handleClose()} isOpen={openModal} scrollBehavior={'inside'} size="3xl">
         <ModalOverlay />
         <ModalContent borderRadius="xl" mx="30px">
           <ModalHeader bg="purple.500" borderTopRadius="xl">
@@ -171,7 +183,14 @@ const CardModal: FC<CardModalProps> = ({ card }) => {
                   <MenuItem onClick={() => alert('clicked')}>Remove Card</MenuItem>
                 </MenuList>
               </Menu>
-              <Icon as={BiX} _hover={{ cursor: 'pointer' }} ml="auto" fontSize="3xl" color="white" onClick={onClose} />
+              <Icon
+                as={BiX}
+                _hover={{ cursor: 'pointer' }}
+                ml="auto"
+                fontSize="3xl"
+                color="white"
+                onClick={handleClose}
+              />
             </Box>
           </ModalHeader>
           <ModalBody
@@ -201,10 +220,10 @@ const CardModal: FC<CardModalProps> = ({ card }) => {
             >
               <Breadcrumb spacing="4px" separator={<ChevronRightIcon color="gray.500" />}>
                 <BreadcrumbItem>
-                  <Text>ACME Frontend Application</Text>
+                  <Text>{boardName}</Text>
                 </BreadcrumbItem>
                 <BreadcrumbItem>
-                  <Text>The New List</Text>
+                  <Text>{listName}</Text>
                 </BreadcrumbItem>
               </Breadcrumb>
               {dueDate && (
@@ -229,11 +248,35 @@ const CardModal: FC<CardModalProps> = ({ card }) => {
             </Box>
 
             <Box id="CARD TITLE INPUT">
-              <Input placeholder="Title*" size="lg" fontSize="sm" value={card.title} />
+              <Input
+                placeholder="Title*"
+                size="lg"
+                fontSize="sm"
+                value={updateCardObject.title}
+                onKeyUp={() => {
+                  setTimeout(() => {
+                    updateCardTitleDescriptionDueDate();
+                  }, 2.0 * 1000);
+                }}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) => onCardTitleChange(event)}
+              />
             </Box>
 
             <Box id="CARD DESCRIPTION TEXTAREA">
-              <Textarea placeholder="Description" size="sm" height="105px" rounded="lg" resize="none" />
+              <Textarea
+                placeholder="Description"
+                size="sm"
+                height="105px"
+                rounded="lg"
+                resize="none"
+                value={updateCardObject.description}
+                onKeyUp={() => {
+                  setTimeout(() => {
+                    updateCardTitleDescriptionDueDate();
+                  }, 2.0 * 1000);
+                }}
+                onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => onCardDescriptionChange(event)}
+              />
             </Box>
 
             <Box id="LABES" display="flex" flexDirection="column" gap="5px">
@@ -255,7 +298,7 @@ const CardModal: FC<CardModalProps> = ({ card }) => {
               </Box>
             </Box>
 
-            <Box id="COMMENT ENTRY" display="flex" flexDirection="column" gap="5px">
+            {/* <Box id="COMMENT ENTRY" display="flex" flexDirection="column" gap="5px">
               <CardModalSection iconType="BiCommentDetail" sectionName="Comment" />
               <Box display="flex" flexDirection="row" alignItems="flex-start" gap="15px">
                 <Box>
@@ -283,7 +326,7 @@ const CardModal: FC<CardModalProps> = ({ card }) => {
                   </Button>
                 </Box>
               </Box>
-            </Box>
+            </Box> */}
           </ModalBody>
         </ModalContent>
       </Modal>

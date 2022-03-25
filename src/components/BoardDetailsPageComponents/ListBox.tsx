@@ -9,10 +9,11 @@ import NameSettingsHolder from './NameSettingsHolder';
 interface ListBoxProps {
   listId: number;
   listName: string;
+  boardName: string;
   cards?: Card[];
 }
 
-const ListBox: FC<ListBoxProps> = ({ listId, listName, cards }) => {
+const ListBox: FC<ListBoxProps> = ({ listId, listName, boardName, cards }) => {
   const list = useAppSelector((state) => state.boardState.data?.lists.find((item) => item.id === listId));
 
   return (
@@ -38,7 +39,16 @@ const ListBox: FC<ListBoxProps> = ({ listId, listName, cards }) => {
       >
         <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" gap="16px" py="20px">
           {list?.cards?.map((item) => {
-            return <CardBox key={item.id} cardProp={item} cardId={item.id} listId={list.id} />;
+            return (
+              <CardBox
+                key={item.id}
+                cardProp={item}
+                cardId={item.id}
+                listId={list.id}
+                listName={list.title}
+                boardName={boardName}
+              />
+            );
           })}
         </Box>
       </Box>

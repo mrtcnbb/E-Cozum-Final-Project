@@ -3,6 +3,8 @@ import { Box, IconButton, Input, InputGroup, InputRightElement, Text } from '@ch
 import { CheckIcon } from '@chakra-ui/icons';
 import authRequest from '../../service/authRequest';
 import { useParams } from 'react-router-dom';
+import { useAppDispatch } from '../../store';
+import { fetchBoard } from '../../features/boardSlice';
 
 interface EditableTextProps {
   editItemName: boolean;
@@ -38,6 +40,8 @@ const EditableText: FC<EditableTextProps> = ({
 }) => {
   const { id } = useParams();
 
+  const dispatch = useAppDispatch();
+
   const [boardsName, setBoardsName] = useState<UpdateBoardTitleBody>({
     title: boardName!,
   });
@@ -50,7 +54,9 @@ const EditableText: FC<EditableTextProps> = ({
   const updateBoardTitle = (boardId: string) => {
     authRequest()
       .put(`board/${boardId}`, boardsName)
-      .then()
+      .then(() => {
+        dispatch(fetchBoard(id!));
+      })
       .catch((error) => {
         console.log(error);
       });
@@ -59,7 +65,9 @@ const EditableText: FC<EditableTextProps> = ({
   const updateListTitle = (listId: number) => {
     authRequest()
       .put(`list/${listId}`, listsName)
-      .then()
+      .then(() => {
+        dispatch(fetchBoard(id!));
+      })
       .catch((error) => {
         console.log(error);
       });

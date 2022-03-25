@@ -96,8 +96,8 @@ export interface Comment {
 export interface Card {
   id: number;
   title: string;
-  description?: any;
-  order?: any;
+  description?: string;
+  order?: number;
   duedate?: any;
   createdAt: Date;
   updatedAt: Date;
