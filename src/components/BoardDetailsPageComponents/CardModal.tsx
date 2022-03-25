@@ -112,6 +112,16 @@ const CardModal: FC<CardModalProps> = ({ card, openModal, listName, boardName, h
       });
   };
 
+  const deleteCard = () => {
+    authRequest()
+      .delete(`card/${card.id}`)
+      .then(() => {
+        dispatch(fetchBoard(id!)).catch((error) => {
+          console.log(error);
+        });
+      });
+  };
+
   return (
     <>
       <Modal onClose={() => handleClose()} isOpen={openModal} scrollBehavior={'inside'} size="3xl">
@@ -206,7 +216,7 @@ const CardModal: FC<CardModalProps> = ({ card, openModal, listName, boardName, h
                   <Icon _hover={{ cursor: 'pointer' }} as={BiDotsHorizontalRounded} color="white" fontSize="2xl" />
                 </MenuButton>
                 <MenuList fontSize="sm" boxSize="-moz-fit-content">
-                  <MenuItem onClick={() => alert('clicked')}>Remove Card</MenuItem>
+                  <MenuItem onClick={() => deleteCard()}>Remove Card</MenuItem>
                 </MenuList>
               </Menu>
               <Icon
