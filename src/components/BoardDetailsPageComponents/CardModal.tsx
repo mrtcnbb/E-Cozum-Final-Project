@@ -116,9 +116,10 @@ const CardModal: FC<CardModalProps> = ({ card, openModal, listName, boardName, h
     authRequest()
       .delete(`card/${card.id}`)
       .then(() => {
-        dispatch(fetchBoard(id!)).catch((error) => {
-          console.log(error);
-        });
+        dispatch(fetchBoard(id!));
+      })
+      .catch((error) => {
+        console.log(error);
       });
   };
 
