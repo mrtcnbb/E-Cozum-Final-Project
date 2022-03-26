@@ -1,4 +1,4 @@
-import { Box } from '@chakra-ui/react';
+import { Box, Tooltip } from '@chakra-ui/react';
 import React, { FC } from 'react';
 
 interface MiniLabelProps {
@@ -7,7 +7,9 @@ interface MiniLabelProps {
 
 const MiniLabel: FC<MiniLabelProps> = ({ labelId }) => {
   return (
-    <Box display="inline-block" height="6px" width="32px" rounded="full" bg={labelId === 1 ? 'red' : 'gray'}></Box>
+    <Tooltip label={labelId === 1 ? 'Önemli' : 'Önemsiz'} aria-label="A tooltip" rounded="lg">
+      <Box display="inline-block" height="6px" width="32px" rounded="full" bg={labelId === 1 ? 'red' : 'gray'}></Box>
+    </Tooltip>
   );
 };
 

@@ -55,19 +55,12 @@ interface CardModalProps {
   handleClose: () => void;
 }
 
-interface AddLabelObjectProps {
-  cardId: number;
-  labelId: number;
-}
-
 const CardModal: FC<CardModalProps> = ({ card, openModal, listName, boardName, handleClose }) => {
   const [cookies, setCookie, removeCookie] = useCookies(['token', 'username']);
   const [itemName, setItemName] = useState('');
   const [startDate, setStartDate] = useState<Date>(new Date());
   const [cheklistName, setcheklistName] = useState('');
   const [dueDate, setDueDate] = useState(false);
-  const [isFirstLabelChecked, setIsFirstLabelChecked] = useState(false);
-  const [isSecondLabelChecked, setIsSecondLabelChecked] = useState(false);
 
   const { id } = useParams();
 
@@ -81,8 +74,6 @@ const CardModal: FC<CardModalProps> = ({ card, openModal, listName, boardName, h
     cardId: card.id,
     message: '',
   });
-
-  const [addLabelObject, setAddLabelObject] = useState<AddLabelObjectProps>({} as AddLabelObjectProps);
 
   const dispatch = useAppDispatch();
 
@@ -106,10 +97,6 @@ const CardModal: FC<CardModalProps> = ({ card, openModal, listName, boardName, h
 
   const onCardCommentChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setCreateCommentObject((prev) => ({ ...prev, message: event.target.value }));
-  };
-
-  const onCardLabelChange = (LabelId: number, CardId: number) => {
-    setAddLabelObject((prev) => ({ ...prev, cardId: CardId, labelId: LabelId }));
   };
 
   const deleteCard = () => {
@@ -145,15 +132,6 @@ const CardModal: FC<CardModalProps> = ({ card, openModal, listName, boardName, h
       });
   };
 
-  const addCardLabel = () => {
-    authRequest()
-      .post('card-label', addLabelObject)
-      .then(() => {
-        dispatch(fetchBoard(id!));
-      })
-      .catch();
-  };
-
   const deleteCardLabel = (labelId: number) => {
     authRequest()
       .delete(`card-label/${labelId}`)
@@ -167,10 +145,6 @@ const CardModal: FC<CardModalProps> = ({ card, openModal, listName, boardName, h
 
   const handleDeleteCardLabel = (labelId: number) => {
     deleteCardLabel(labelId);
-  };
-
-  const handleAddCardLabel = () => {
-    addCardLabel();
   };
 
   return (
@@ -480,7 +454,7 @@ const CardModal: FC<CardModalProps> = ({ card, openModal, listName, boardName, h
               <Box id="ACTIVITY SECTION" display="flex" flexDirection="column" gap="5px">
                 <CardModalSection iconType="BiCommentDetail" sectionName="Activity" />
                 {card.comments.map((item) => {
-                  return <CardModalActivity authorName={item.author.username} message={item.message} />;
+                  return <CardModalActivity key={item.id} authorName={item.author.username} message={item.message} />;
                 })}
               </Box>
             </Box>
