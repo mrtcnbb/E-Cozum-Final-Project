@@ -1,9 +1,11 @@
 import { Box, Button } from '@chakra-ui/react';
 import { RiBarChartBoxLine } from 'react-icons/ri';
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import EditableText from './EditableText';
 import BoardDetailsDrawer from './BoardDetailsDrawer';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '../../store';
+import { fetchBoard } from '../../features/boardSlice';
 
 interface BoardDetailsHeaderProps {
   boardName: string;
@@ -11,6 +13,15 @@ interface BoardDetailsHeaderProps {
 }
 
 const BoardDetailsHeader: FC<BoardDetailsHeaderProps> = ({ boardName, boardId }) => {
+  const { id } = useParams();
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(fetchBoard(id!));
+  }, [dispatch, id]);
+
+  const boardTitle = useAppSelector((state) => state.boardState.data?.title);
+
   const [editItemName, setEditItemName] = useState(false);
   const navigate = useNavigate();
 

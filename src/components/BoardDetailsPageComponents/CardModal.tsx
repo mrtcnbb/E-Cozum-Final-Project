@@ -33,6 +33,7 @@ import {
 import { BiCalendar, BiLabel, BiCheckSquare, BiDotsHorizontalRounded, BiX } from 'react-icons/bi';
 import React, { FC, useEffect, useState } from 'react';
 import { ChevronRightIcon } from '@chakra-ui/icons';
+import { useCookies } from 'react-cookie';
 
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -44,6 +45,7 @@ import authRequest from '../../service/authRequest';
 import { useAppDispatch, useAppSelector } from '../../store';
 import { useParams } from 'react-router-dom';
 import { fetchLabels } from '../../features/labelsListSlice';
+import CardModalActivity from './CardModalActivity';
 
 interface CardModalProps {
   card: Card;
@@ -53,7 +55,13 @@ interface CardModalProps {
   handleClose: () => void;
 }
 
+interface AddLabelObjectProps {
+  cardId: number;
+  labelId: number;
+}
+
 const CardModal: FC<CardModalProps> = ({ card, openModal, listName, boardName, handleClose }) => {
+  const [cookies, setCookie, removeCookie] = useCookies(['token', 'username']);
   const [itemName, setItemName] = useState('');
   const [startDate, setStartDate] = useState<Date>(new Date());
   const [cheklistName, setcheklistName] = useState('');
@@ -72,6 +80,8 @@ const CardModal: FC<CardModalProps> = ({ card, openModal, listName, boardName, h
     message: '',
   });
 
+  const [addLabelObject, setAddLabelObject] = useState<AddLabelObjectProps>({} as AddLabelObjectProps);
+
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -84,8 +94,6 @@ const CardModal: FC<CardModalProps> = ({ card, openModal, listName, boardName, h
 
   const arrayOfLabels = ['High Priority', 'App', 'Feature', 'Design'];
 
-  const toast = useToast();
-
   const onCardTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUpdateCardObject((prev) => ({ ...prev, title: event.target.value }));
   };
@@ -96,6 +104,10 @@ const CardModal: FC<CardModalProps> = ({ card, openModal, listName, boardName, h
 
   const onCardCommentChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setCreateCommentObject((prev) => ({ ...prev, message: event.target.value }));
+  };
+
+  const onCardLabelChange = (LabelId: number, CardId: number) => {
+    setAddLabelObject((prev) => ({ ...prev, cardId: CardId, labelId: LabelId }));
   };
 
   const updateCardTitleDescriptionDueDate = () => {
@@ -129,6 +141,15 @@ const CardModal: FC<CardModalProps> = ({ card, openModal, listName, boardName, h
       .catch((error) => {
         console.log(error);
       });
+  };
+
+  const addCardLabel = () => {
+    authRequest()
+      .post('card-label', addLabelObject)
+      .then(() => {
+        dispatch(fetchBoard(id!));
+      })
+      .catch();
   };
 
   return (
@@ -176,11 +197,30 @@ const CardModal: FC<CardModalProps> = ({ card, openModal, listName, boardName, h
                 </MenuButton>
                 <MenuList fontSize="sm">
                   <MenuItem closeOnSelect={false}>
-                    <CheckboxGroup colorScheme="teal" defaultValue={[]}>
+                    <CheckboxGroup
+                      colorScheme="teal"
+                      defaultValue={[]}
+                      onChange={(e) => {
+                        console.log('checked has changed!', e);
+                      }}
+                    >
                       <Box display={'flex'} flexDirection="column" gap="10px">
                         {labels.data?.map((item) => {
                           return (
-                            <Checkbox value={item.title} onChange={(e) => console.log(e.currentTarget.value)}>
+                            <Checkbox
+                              key={item.id}
+                              value={item.title}
+                              onChange={(e) => {
+                                if (e.target.checked === true) {
+                                  // TODO: Study on adding label
+                                  // ADD LABEL HERE
+                                  onCardLabelChange(item.id, card.id);
+                                  addCardLabel();
+                                } else {
+                                  // DELETE LABEL HERE
+                                }
+                              }}
+                            >
                               <Box display="flex" justifyContent="space-between" alignItems="center">
                                 <Text>{item.title}</Text> <Icon as={BiLabel} fontSize="2xl" pl="auto" />
                               </Box>
@@ -232,7 +272,7 @@ const CardModal: FC<CardModalProps> = ({ card, openModal, listName, boardName, h
             pb="45px"
             display="flex"
             flexDirection="column"
-            gap="20px"
+            gap="45px"
             sx={{
               '&::-webkit-scrollbar': {
                 width: '5px',
@@ -245,72 +285,72 @@ const CardModal: FC<CardModalProps> = ({ card, openModal, listName, boardName, h
               },
             }}
           >
-            <Box
-              id="BREADCRUMB AND DUE DATE"
-              display="flex"
-              flexDirection="row"
-              justifyContent="space-between"
-              alignItems="center"
-            >
-              <Breadcrumb spacing="4px" separator={<ChevronRightIcon color="gray.500" />}>
-                <BreadcrumbItem>
-                  <Text>{boardName}</Text>
-                </BreadcrumbItem>
-                <BreadcrumbItem>
-                  <Text>{listName}</Text>
-                </BreadcrumbItem>
-              </Breadcrumb>
-              {dueDate && (
-                <Box border="1px" borderColor="gray.300" rounded="lg" px="13px" py="19px" fontSize="sm">
-                  <Text>Due Date: {theDueDate}</Text>
-                  <Popover>
-                    <PopoverTrigger>
-                      <Button>
-                        <Icon _hover={{ cursor: 'pointer' }} as={BiCalendar} color="white" fontSize="2xl" />
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent>
-                      <PopoverArrow />
-                      <PopoverCloseButton />
-                      <PopoverHeader>Confirmation!</PopoverHeader>
-                      <PopoverBody>Are you sure you want to have that milkshake?</PopoverBody>
-                    </PopoverContent>
-                  </Popover>
-                  <DatePicker selected={startDate} onChange={(date) => setStartDate(date!)} />
-                </Box>
-              )}
-            </Box>
-
-            <Box id="CARD TITLE INPUT">
-              <Input
-                placeholder="Title*"
-                size="lg"
-                fontSize="sm"
-                value={updateCardObject.title}
-                onKeyUp={() => {
-                  setTimeout(() => {
-                    updateCardTitleDescriptionDueDate();
-                  }, 2.0 * 1000);
-                }}
-                onChange={(event: React.ChangeEvent<HTMLInputElement>) => onCardTitleChange(event)}
-              />
-            </Box>
-
-            <Box id="CARD DESCRIPTION TEXTAREA">
-              <Textarea
-                placeholder="Description"
-                size="sm"
-                height="105px"
-                rounded="lg"
-                resize="none"
-                value={updateCardObject.description}
-                onKeyUp={() => {
-                  setTimeout(() => {
-                    updateCardTitleDescriptionDueDate();
-                  }, 2.0 * 1000);
-                }}
-                onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => onCardDescriptionChange(event)}
-              />
+            <Box id="BREADCRUMB-DUEADATE-TITLE-DESCRIPTION" display={'flex'} flexDirection="column" gap={'20px'}>
+              <Box
+                id="BREADCRUMB AND DUE DATE"
+                display="flex"
+                flexDirection="row"
+                justifyContent="space-between"
+                alignItems="center"
+              >
+                <Breadcrumb spacing="4px" separator={<ChevronRightIcon color="gray.500" />}>
+                  <BreadcrumbItem>
+                    <Text>{boardName}</Text>
+                  </BreadcrumbItem>
+                  <BreadcrumbItem>
+                    <Text>{listName}</Text>
+                  </BreadcrumbItem>
+                </Breadcrumb>
+                {dueDate && (
+                  <Box border="1px" borderColor="gray.300" rounded="lg" px="13px" py="19px" fontSize="sm">
+                    <Text>Due Date: {theDueDate}</Text>
+                    <Popover>
+                      <PopoverTrigger>
+                        <Button>
+                          <Icon _hover={{ cursor: 'pointer' }} as={BiCalendar} color="white" fontSize="2xl" />
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent>
+                        <PopoverArrow />
+                        <PopoverCloseButton />
+                        <PopoverHeader>Confirmation!</PopoverHeader>
+                        <PopoverBody>Are you sure you want to have that milkshake?</PopoverBody>
+                      </PopoverContent>
+                    </Popover>
+                    <DatePicker selected={startDate} onChange={(date) => setStartDate(date!)} />
+                  </Box>
+                )}
+              </Box>
+              <Box id="CARD TITLE INPUT">
+                <Input
+                  placeholder="Title*"
+                  size="lg"
+                  fontSize="sm"
+                  value={updateCardObject.title}
+                  onKeyUp={() => {
+                    setTimeout(() => {
+                      updateCardTitleDescriptionDueDate();
+                    }, 2.0 * 1000);
+                  }}
+                  onChange={(event: React.ChangeEvent<HTMLInputElement>) => onCardTitleChange(event)}
+                />
+              </Box>
+              <Box id="CARD DESCRIPTION TEXTAREA">
+                <Textarea
+                  placeholder="Description"
+                  size="sm"
+                  height="105px"
+                  rounded="lg"
+                  resize="none"
+                  value={updateCardObject.description}
+                  onKeyUp={() => {
+                    setTimeout(() => {
+                      updateCardTitleDescriptionDueDate();
+                    }, 2.0 * 1000);
+                  }}
+                  onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => onCardDescriptionChange(event)}
+                />
+              </Box>
             </Box>
 
             <Box id="LABES" display="flex" flexDirection="column" gap="5px">
@@ -336,7 +376,7 @@ const CardModal: FC<CardModalProps> = ({ card, openModal, listName, boardName, h
               <CardModalSection iconType="BiCommentDetail" sectionName="Comment" />
               <Box display="flex" flexDirection="row" alignItems="flex-start" gap="15px">
                 <Box>
-                  <Avatar bg="purple.500" color="white" name="Muratcan Baba" size="sm" />
+                  <Avatar bg="purple.500" color="white" name={cookies.username} size="sm" />
                 </Box>
                 <Box width="full" display="flex" flexDirection="column" alignItems="start" gap="15px">
                   <Input
@@ -361,6 +401,12 @@ const CardModal: FC<CardModalProps> = ({ card, openModal, listName, boardName, h
                   </Button>
                 </Box>
               </Box>
+            </Box>
+            <Box id="ACTIVITY SECTION">
+              <CardModalSection iconType="BiCommentDetail" sectionName="Activity" />
+              {card.comments.map((item) => {
+                return <CardModalActivity authorName={item.author.username} message={item.message} />;
+              })}
             </Box>
           </ModalBody>
         </ModalContent>

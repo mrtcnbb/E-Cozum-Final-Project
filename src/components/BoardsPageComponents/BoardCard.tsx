@@ -42,7 +42,7 @@ const BoardCard: FC<BoardCardProps> = ({ addBoard, boardName, boardId }) => {
             await dispatch(createBoard());
             const path = boardList.data && boardList.data[boardList.data.length - 1].id;
             const newPath = boardList.postBoardData;
-            navigate(`/board/${newPath}`);
+            navigate(`/board/${path}`);
           })();
         } else {
           navigate(`/board/${boardId}`);
