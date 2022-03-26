@@ -13,7 +13,6 @@ const CardModalActivity: FC<CardModalActivityProps> = ({ authorName, message }) 
       flexDirection="row"
       justifyContent="flex-start"
       alignItems="center"
-      my="5px"
       gap="15px"
       borderLeftRadius="lg"
       borderRightRadius="2xl"

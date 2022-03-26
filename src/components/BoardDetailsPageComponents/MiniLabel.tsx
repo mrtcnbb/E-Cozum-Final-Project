@@ -2,18 +2,12 @@ import { Box } from '@chakra-ui/react';
 import React, { FC } from 'react';
 
 interface MiniLabelProps {
-  labelColor?: string;
+  labelId: number;
 }
 
-const MiniLabel: FC<MiniLabelProps> = ({ labelColor }) => {
+const MiniLabel: FC<MiniLabelProps> = ({ labelId }) => {
   return (
-    <Box
-      display="inline-block"
-      height="6px"
-      width="32px"
-      rounded="full"
-      bg={labelColor === 'red' ? 'red' : labelColor === 'blue' ? 'blue' : labelColor === 'orange' ? 'orange' : 'green'}
-    ></Box>
+    <Box display="inline-block" height="6px" width="32px" rounded="full" bg={labelId === 1 ? 'red' : 'gray'}></Box>
   );
 };
 

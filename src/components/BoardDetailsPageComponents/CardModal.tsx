@@ -110,6 +110,17 @@ const CardModal: FC<CardModalProps> = ({ card, openModal, listName, boardName, h
     setAddLabelObject((prev) => ({ ...prev, cardId: CardId, labelId: LabelId }));
   };
 
+  const deleteCard = () => {
+    authRequest()
+      .delete(`card/${card.id}`)
+      .then(() => {
+        dispatch(fetchBoard(id!));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   const updateCardTitleDescriptionDueDate = () => {
     authRequest()
       .put(`card/${card.id}`, updateCardObject)
@@ -132,9 +143,18 @@ const CardModal: FC<CardModalProps> = ({ card, openModal, listName, boardName, h
       });
   };
 
-  const deleteCard = () => {
+  const addCardLabel = () => {
     authRequest()
-      .delete(`card/${card.id}`)
+      .post('card-label', addLabelObject)
+      .then(() => {
+        dispatch(fetchBoard(id!));
+      })
+      .catch();
+  };
+
+  const deleteCardLabel = (labelId: number) => {
+    authRequest()
+      .delete(`card-label/${labelId}`)
       .then(() => {
         dispatch(fetchBoard(id!));
       })
@@ -143,13 +163,8 @@ const CardModal: FC<CardModalProps> = ({ card, openModal, listName, boardName, h
       });
   };
 
-  const addCardLabel = () => {
-    authRequest()
-      .post('card-label', addLabelObject)
-      .then(() => {
-        dispatch(fetchBoard(id!));
-      })
-      .catch();
+  const handleDeleteCardLabel = (labelId: number) => {
+    deleteCardLabel(labelId);
   };
 
   return (
@@ -197,38 +212,31 @@ const CardModal: FC<CardModalProps> = ({ card, openModal, listName, boardName, h
                 </MenuButton>
                 <MenuList fontSize="sm">
                   <MenuItem closeOnSelect={false}>
-                    <CheckboxGroup
-                      colorScheme="teal"
-                      defaultValue={[]}
-                      onChange={(e) => {
-                        console.log('checked has changed!', e);
-                      }}
-                    >
-                      <Box display={'flex'} flexDirection="column" gap="10px">
-                        {labels.data?.map((item) => {
-                          return (
-                            <Checkbox
-                              key={item.id}
-                              value={item.title}
-                              onChange={(e) => {
-                                if (e.target.checked === true) {
-                                  // TODO: Study on adding label
-                                  // ADD LABEL HERE
-                                  onCardLabelChange(item.id, card.id);
-                                  addCardLabel();
-                                } else {
-                                  // DELETE LABEL HERE
-                                }
-                              }}
-                            >
-                              <Box display="flex" justifyContent="space-between" alignItems="center">
-                                <Text>{item.title}</Text> <Icon as={BiLabel} fontSize="2xl" pl="auto" />
-                              </Box>
-                            </Checkbox>
-                          );
-                        })}
-                      </Box>
-                    </CheckboxGroup>
+                    <Box display={'flex'} flexDirection="column" gap="10px">
+                      {labels.data?.map((item) => {
+                        return (
+                          <Checkbox
+                            colorScheme="teal"
+                            key={item.id}
+                            value={item.title}
+                            onChange={(e) => {
+                              if (e.target.checked === false) {
+                                // TODO: Study on adding label
+                                // ADD LABEL HERE
+                                onCardLabelChange(item.id, card.id);
+                                addCardLabel();
+                              } else {
+                                // DELETE LABEL HERE
+                              }
+                            }}
+                          >
+                            <Box display="flex" justifyContent="space-between" alignItems="center">
+                              <Text>{item.title}</Text> <Icon as={BiLabel} fontSize="2xl" pl="auto" />
+                            </Box>
+                          </Checkbox>
+                        );
+                      })}
+                    </Box>
                   </MenuItem>
                 </MenuList>
               </Menu>
@@ -364,49 +372,68 @@ const CardModal: FC<CardModalProps> = ({ card, openModal, listName, boardName, h
                 p="15px"
                 overflowX={'auto'}
               >
-                {arrayOfLabels?.map((item) => {
-                  return <CardModalLabel labelName={item} key={item} />;
+                {card.labels.map((item) => {
+                  return (
+                    <CardModalLabel
+                      key={item.id}
+                      labelId={item.id}
+                      deleteLabel={() => handleDeleteCardLabel(item.CardLabel.id)}
+                    />
+                  );
                 })}
                 {/* <CloseButton ml="auto" /> */}
-                <Icon as={BiX} _hover={{ cursor: 'pointer' }} ml="auto" fontSize="3xl" color="black" />
+                <Icon
+                  as={BiX}
+                  _hover={{ cursor: 'pointer' }}
+                  ml="auto"
+                  fontSize="3xl"
+                  color="black"
+                  onClick={() => {
+                    card.labels?.forEach((item) => {
+                      deleteCardLabel(item.CardLabel.id);
+                    });
+                  }}
+                />
               </Box>
             </Box>
 
-            <Box id="COMMENT ENTRY" display="flex" flexDirection="column" gap="5px">
-              <CardModalSection iconType="BiCommentDetail" sectionName="Comment" />
-              <Box display="flex" flexDirection="row" alignItems="flex-start" gap="15px">
-                <Box>
-                  <Avatar bg="purple.500" color="white" name={cookies.username} size="sm" />
-                </Box>
-                <Box width="full" display="flex" flexDirection="column" alignItems="start" gap="15px">
-                  <Input
-                    placeholder="Add comment"
-                    size="lg"
-                    fontSize="sm"
-                    value={createCommentObject.message}
-                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => onCardCommentChange(event)}
-                  />
-                  <Button
-                    disabled={createCommentObject.message.trim() === ''}
-                    colorScheme="teal"
-                    variant="solid"
-                    borderRadius="100"
-                    size="sm"
-                    onClick={() => {
-                      createCardComment();
-                      setCreateCommentObject((prev) => ({ ...prev, message: '' }));
-                    }}
-                  >
-                    Save
-                  </Button>
+            <Box id="COMMENT-ACTIVIY" display={'flex'} flexDirection="column" gap="30px">
+              <Box id="COMMENT ENTRY" display="flex" flexDirection="column" gap="5px">
+                <CardModalSection iconType="BiCommentDetail" sectionName="Comment" />
+                <Box display="flex" flexDirection="row" alignItems="flex-start" gap="15px">
+                  <Box>
+                    <Avatar bg="purple.500" color="white" name={cookies.username} size="sm" />
+                  </Box>
+                  <Box width="full" display="flex" flexDirection="column" alignItems="start" gap="15px">
+                    <Input
+                      placeholder="Add comment"
+                      size="lg"
+                      fontSize="sm"
+                      value={createCommentObject.message}
+                      onChange={(event: React.ChangeEvent<HTMLInputElement>) => onCardCommentChange(event)}
+                    />
+                    <Button
+                      disabled={createCommentObject.message.trim() === ''}
+                      colorScheme="teal"
+                      variant="solid"
+                      borderRadius="100"
+                      size="sm"
+                      onClick={() => {
+                        createCardComment();
+                        setCreateCommentObject((prev) => ({ ...prev, message: '' }));
+                      }}
+                    >
+                      Save
+                    </Button>
+                  </Box>
                 </Box>
               </Box>
-            </Box>
-            <Box id="ACTIVITY SECTION">
-              <CardModalSection iconType="BiCommentDetail" sectionName="Activity" />
-              {card.comments.map((item) => {
-                return <CardModalActivity authorName={item.author.username} message={item.message} />;
-              })}
+              <Box id="ACTIVITY SECTION" display="flex" flexDirection="column" gap="5px">
+                <CardModalSection iconType="BiCommentDetail" sectionName="Activity" />
+                {card.comments.map((item) => {
+                  return <CardModalActivity authorName={item.author.username} message={item.message} />;
+                })}
+              </Box>
             </Box>
           </ModalBody>
         </ModalContent>

@@ -51,8 +51,8 @@ const CardBox: FC<CardBoxProps> = ({ cardProp, cardId, listId, listName, boardNa
     >
       <Box p="15px">
         <Box display="flex" gap={2}>
-          {labels.map((item: string) => {
-            return <MiniLabel labelColor={item} key={item} />;
+          {card?.labels.map((item) => {
+            return <MiniLabel labelId={item.id} key={item.id} />;
           })}
         </Box>
         <Text my="18px">{card?.title}</Text>
