@@ -14,6 +14,8 @@ interface EditableTextProps {
   boardId?: string;
   listName?: string;
   listId?: number;
+  checklistId?: number;
+  checklistName?: string;
   item?: string;
   handleEditItemName: (isEditable: boolean) => void;
 }
@@ -27,6 +29,10 @@ interface UpdateListTitleBody {
   boardId: number;
 }
 
+interface UpdateChecklistTitleBody {
+  title: string;
+}
+
 const EditableText: FC<EditableTextProps> = ({
   editItemName,
   textSize,
@@ -35,6 +41,8 @@ const EditableText: FC<EditableTextProps> = ({
   boardId,
   listName,
   listId,
+  checklistId,
+  checklistName,
   item,
   handleEditItemName,
 }) => {
@@ -49,6 +57,10 @@ const EditableText: FC<EditableTextProps> = ({
   const [listsName, setListsName] = useState<UpdateListTitleBody>({
     title: listName!,
     boardId: Number(id),
+  });
+
+  const [checklistsName, setChecklistsName] = useState<UpdateChecklistTitleBody>({
+    title: checklistName!,
   });
 
   const updateBoardTitle = (boardId: string) => {
@@ -73,6 +85,16 @@ const EditableText: FC<EditableTextProps> = ({
       });
   };
 
+  const updateChecklistTitle = (checklistId: number) => {
+    authRequest()
+      .put(`checklist/${checklistId}`, checklistsName)
+      .then(() => {
+        dispatch(fetchBoard(id!)).catch((error) => {
+          console.log(error);
+        });
+      });
+  };
+
   const handleBoardNameEntry = (boardId: string) => {
     if (boardsName.title.trim() === '') {
       alert('Bu alan boş bırakılamaz!');
@@ -91,6 +113,15 @@ const EditableText: FC<EditableTextProps> = ({
     }
   };
 
+  const handleChecklistNameEntry = (checklistId: number) => {
+    if (checklistsName.title.trim() === '') {
+      alert('Bu alan boş bırakılamaz!');
+    } else {
+      updateChecklistTitle(checklistId!);
+      handleEditItemName(false);
+    }
+  };
+
   const onBoardTextChange = (event: any) => {
     setBoardsName((prev) => ({ ...prev, title: event.target.value }));
   };
@@ -99,27 +130,33 @@ const EditableText: FC<EditableTextProps> = ({
     setListsName((prev) => ({ ...prev, title: event.target.value }));
   };
 
+  const onChecklistTextChange = (event: any) => {
+    setChecklistsName((prev) => ({ ...prev, title: event.target.value }));
+  };
+
   return (
-    <Box marginTop="2.5" pl={4}>
+    <Box marginTop="2.5" pl={item === 'Checklist' ? 0 : 4}>
       {!editItemName ? (
         <Text
           color={textColor}
           fontWeight="semibold"
-          fontSize={textSize}
+          fontSize={item === 'Checklist' ? 'lg' : textSize}
           _hover={{ cursor: 'pointer' }}
           onClick={() => handleEditItemName(true)}
         >
-          {item === 'list' ? listsName.title : boardsName.title}
+          {item === 'list' ? listsName.title : item === 'Checklist' ? checklistsName.title : boardsName.title}
         </Text>
       ) : (
         <InputGroup>
           <Input
             color={textColor}
             borderColor="black"
-            value={item === 'list' ? listsName.title : boardsName.title}
+            value={item === 'list' ? listsName.title : item === 'Checklist' ? checklistsName.title : boardsName.title}
             onChange={(event: any) => {
               if (item === 'list') {
                 onListTextChange(event);
+              } else if (item === 'Checklist') {
+                onChecklistTextChange(event);
               } else {
                 onBoardTextChange(event);
               }
@@ -129,6 +166,8 @@ const EditableText: FC<EditableTextProps> = ({
             onClick={() => {
               if (item === 'list') {
                 handleListNameEntry(listId!);
+              } else if (item === 'Checklist') {
+                handleChecklistNameEntry(checklistId!);
               } else {
                 handleBoardNameEntry(id!);
               }

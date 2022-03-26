@@ -18,17 +18,6 @@ import {
   Textarea,
   Avatar,
   Checkbox,
-  CheckboxGroup,
-  Stack,
-  Popover,
-  PopoverArrow,
-  PopoverBody,
-  PopoverCloseButton,
-  PopoverContent,
-  PopoverHeader,
-  PopoverTrigger,
-  useToast,
-  VStack,
 } from '@chakra-ui/react';
 import { BiCalendar, BiLabel, BiCheckSquare, BiDotsHorizontalRounded, BiX } from 'react-icons/bi';
 import React, { FC, useEffect, useState } from 'react';
@@ -46,6 +35,8 @@ import { useAppDispatch, useAppSelector } from '../../store';
 import { useParams } from 'react-router-dom';
 import { fetchLabels } from '../../features/labelsListSlice';
 import CardModalActivity from './CardModalActivity';
+import CardModalChecklist from './CardModalChecklist';
+import AddChecklist from './AddChecklist';
 
 interface CardModalProps {
   card: Card;
@@ -84,8 +75,6 @@ const CardModal: FC<CardModalProps> = ({ card, openModal, listName, boardName, h
   const labels = useAppSelector((state) => state.labelsList);
 
   const theDueDate = format(new Date(startDate), 'MMM dd yyyy');
-
-  const arrayOfLabels = ['High Priority', 'App', 'Feature', 'Design'];
 
   const onCardTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUpdateCardObject((prev) => ({ ...prev, title: event.target.value }));
@@ -263,23 +252,18 @@ const CardModal: FC<CardModalProps> = ({ card, openModal, listName, boardName, h
                   </MenuItem>
                 </MenuList>
               </Menu>
-              <Menu>
+              {/* <Menu>
                 <MenuButton>
                   <Icon _hover={{ cursor: 'pointer' }} as={BiCheckSquare} color="white" fontSize="2xl" />
                 </MenuButton>
                 <MenuList fontSize="sm" boxSize="-moz-fit-content">
-                  {/* <MenuItem closeOnSelect={false}> */}
+                  
                   <MenuItem closeOnSelect={false}>
-                    <Input
-                      placeholder="Checklist title"
-                      value={cheklistName}
-                      onChange={(e) => setcheklistName(e.currentTarget.value)}
-                    />
-                    {/* <Button>Add</Button> */}
+                    <AddChecklist />
                   </MenuItem>
-                  {/* </MenuItem> */}
                 </MenuList>
-              </Menu>
+              </Menu> */}
+              <AddChecklist cardId={card.id} />
               <Menu>
                 <MenuButton>
                   <Icon _hover={{ cursor: 'pointer' }} as={BiDotsHorizontalRounded} color="white" fontSize="2xl" />
@@ -333,21 +317,16 @@ const CardModal: FC<CardModalProps> = ({ card, openModal, listName, boardName, h
                   </BreadcrumbItem>
                 </Breadcrumb>
                 {dueDate && (
-                  <Box border="1px" borderColor="gray.300" rounded="lg" px="13px" py="19px" fontSize="sm">
-                    <Text>Due Date: {theDueDate}</Text>
-                    <Popover>
-                      <PopoverTrigger>
-                        <Button>
-                          <Icon _hover={{ cursor: 'pointer' }} as={BiCalendar} color="white" fontSize="2xl" />
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent>
-                        <PopoverArrow />
-                        <PopoverCloseButton />
-                        <PopoverHeader>Confirmation!</PopoverHeader>
-                        <PopoverBody>Are you sure you want to have that milkshake?</PopoverBody>
-                      </PopoverContent>
-                    </Popover>
+                  <Box
+                    display={'flex'}
+                    flexDirection="row"
+                    border="1px"
+                    borderColor="gray.300"
+                    rounded="lg"
+                    px="13px"
+                    py="10px"
+                    fontSize="sm"
+                  >
                     <DatePicker selected={startDate} onChange={(date) => setStartDate(date!)} />
                   </Box>
                 )}
@@ -404,7 +383,6 @@ const CardModal: FC<CardModalProps> = ({ card, openModal, listName, boardName, h
                     />
                   );
                 })}
-                {/* <CloseButton ml="auto" /> */}
                 <Icon
                   as={BiX}
                   _hover={{ cursor: 'pointer' }}
@@ -419,7 +397,11 @@ const CardModal: FC<CardModalProps> = ({ card, openModal, listName, boardName, h
                 />
               </Box>
             </Box>
-
+            <Box id="CHECKLIST AREA">
+              {card.checklists.map((item) => {
+                return <CardModalChecklist key={item.id} checklist={item} />;
+              })}
+            </Box>
             <Box id="COMMENT-ACTIVIY" display={'flex'} flexDirection="column" gap="30px">
               <Box id="COMMENT ENTRY" display="flex" flexDirection="column" gap="5px">
                 <CardModalSection iconType="BiCommentDetail" sectionName="Comment" />

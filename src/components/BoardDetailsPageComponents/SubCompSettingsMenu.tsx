@@ -4,27 +4,41 @@ import { FC } from 'react';
 import authRequest from '../../service/authRequest';
 import { BiDotsVerticalRounded } from 'react-icons/bi';
 import { useAppDispatch, useAppSelector } from '../../store';
-import { setIsTriggered } from '../../features/triggerSlice';
 import { fetchBoard } from '../../features/boardSlice';
 import { useParams } from 'react-router-dom';
 
 interface SubCompSettingsMenuProps {
   subCompName: string;
   listId?: number;
+  checklistId?: number;
   handleEditListName: (isEditable: boolean) => void;
 }
 
-const SubCompSettingsMenu: FC<SubCompSettingsMenuProps> = ({ subCompName, listId, handleEditListName }) => {
+const SubCompSettingsMenu: FC<SubCompSettingsMenuProps> = ({
+  subCompName,
+  listId,
+  checklistId,
+  handleEditListName,
+}) => {
   const { id } = useParams();
-
-  const trigger = useAppSelector((state) => state.triggerState);
 
   const dispatch = useAppDispatch();
 
   const deleteList = (listId: number) => {
     authRequest()
       .delete(`list/${listId}`)
-      .then((res) => {
+      .then(() => {
+        dispatch(fetchBoard(id!));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const deleteChecklist = (checklistId: number) => {
+    authRequest()
+      .delete(`checklist/${checklistId}`)
+      .then(() => {
         dispatch(fetchBoard(id!));
       })
       .catch((error) => {
@@ -44,7 +58,16 @@ const SubCompSettingsMenu: FC<SubCompSettingsMenuProps> = ({ subCompName, listId
         icon={<Icon as={BiDotsVerticalRounded} />}
       />
       <MenuList>
-        <MenuItem onClick={() => deleteList(listId!)} icon={<DeleteIcon />}>
+        <MenuItem
+          onClick={() => {
+            if (subCompName === 'list') {
+              deleteList(listId!);
+            } else {
+              deleteChecklist(checklistId!);
+            }
+          }}
+          icon={<DeleteIcon />}
+        >
           Remove {subCompName}
         </MenuItem>
         <MenuItem onClick={() => handleEditListName(true)} icon={<EditIcon />}>

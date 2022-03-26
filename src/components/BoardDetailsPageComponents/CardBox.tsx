@@ -7,6 +7,7 @@ import { Card } from '../../features/boardSlice';
 import { useAppDispatch, useAppSelector } from '../../store';
 import CardModal from './CardModal';
 import React from 'react';
+import { Item } from 'framer-motion/types/components/Reorder/Item';
 
 interface CardBoxProps {
   cardProp: Card;
@@ -35,7 +36,25 @@ const CardBox: FC<CardBoxProps> = ({ cardProp, cardId, listId, listName, boardNa
       ?.cards.find((cardItem) => cardItem.id === cardId)
   );
 
-  const labels = ['red', 'blue', 'orange', 'green'];
+  const calculateTotalChecks = () => {
+    let totalChecks = 0;
+    card?.checklists.forEach((item) => {
+      totalChecks += item.items.length;
+    });
+    return totalChecks;
+  };
+
+  const calculateTotalCheckeds = () => {
+    let totalCheckeds = 0;
+    card?.checklists.forEach((Item) => {
+      Item.items.forEach((itemC) => {
+        if (itemC.isChecked === true) {
+          totalCheckeds += 1;
+        }
+      });
+    });
+    return totalCheckeds;
+  };
   return (
     <Box
       bg="#F9F9F9"
@@ -57,8 +76,15 @@ const CardBox: FC<CardBoxProps> = ({ cardProp, cardId, listId, listName, boardNa
         </Box>
         <Text my="18px">{card?.title}</Text>
         <Box display="flex" justifyContent="start" gap="5px">
-          <CardTag tagType="dueDate" test="test" />
-          <CardTag tagType="checkRatio" test="test" />
+          {card?.checklists.length !== 0 && (
+            <CardTag
+              tagType="checkRatio"
+              totalCheckeds={() => calculateTotalCheckeds()}
+              totalChecks={() => calculateTotalChecks()}
+            />
+          )}
+          {/* <CardTag tagType="dueDate" />
+          <CardTag tagType="checkRatio" /> */}
         </Box>
       </Box>
 

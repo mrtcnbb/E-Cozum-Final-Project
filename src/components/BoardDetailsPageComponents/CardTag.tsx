@@ -4,19 +4,20 @@ import { BiTimeFive, BiCheckCircle } from 'react-icons/bi';
 
 interface CardTagProps {
   tagType: 'dueDate' | 'checkRatio';
-  test: 'test';
+  totalChecks?: () => number;
+  totalCheckeds?: () => number;
 }
 
-const CardTag: FC<CardTagProps> = ({ tagType, test }) => {
+const CardTag: FC<CardTagProps> = ({ tagType, totalChecks, totalCheckeds }) => {
   return (
     <Tag
       size={'md'}
       rounded="full"
       variant="subtle"
-      colorScheme={tagType === 'dueDate' && test === 'test' ? 'teal' : 'blackAlpha'}
+      colorScheme={tagType === 'checkRatio' && totalCheckeds!() / totalChecks!() === 1 ? 'teal' : 'blackAlpha'}
     >
       <TagLeftIcon boxSize="18px" as={tagType === 'dueDate' ? BiTimeFive : BiCheckCircle} />
-      <TagLabel lineHeight="taller">Test Tag</TagLabel>
+      <TagLabel lineHeight="taller">{tagType === 'checkRatio' ? `${totalCheckeds!()}/${totalChecks!()}` : ''}</TagLabel>
     </Tag>
   );
 };
