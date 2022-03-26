@@ -66,6 +66,8 @@ const CardModal: FC<CardModalProps> = ({ card, openModal, listName, boardName, h
   const [startDate, setStartDate] = useState<Date>(new Date());
   const [cheklistName, setcheklistName] = useState('');
   const [dueDate, setDueDate] = useState(false);
+  const [isFirstLabelChecked, setIsFirstLabelChecked] = useState(false);
+  const [isSecondLabelChecked, setIsSecondLabelChecked] = useState(false);
 
   const { id } = useParams();
 
@@ -167,6 +169,10 @@ const CardModal: FC<CardModalProps> = ({ card, openModal, listName, boardName, h
     deleteCardLabel(labelId);
   };
 
+  const handleAddCardLabel = () => {
+    addCardLabel();
+  };
+
   return (
     <>
       <Modal onClose={() => handleClose()} isOpen={openModal} scrollBehavior={'inside'} size="3xl">
@@ -213,29 +219,72 @@ const CardModal: FC<CardModalProps> = ({ card, openModal, listName, boardName, h
                 <MenuList fontSize="sm">
                   <MenuItem closeOnSelect={false}>
                     <Box display={'flex'} flexDirection="column" gap="10px">
-                      {labels.data?.map((item) => {
-                        return (
-                          <Checkbox
-                            colorScheme="teal"
-                            key={item.id}
-                            value={item.title}
-                            onChange={(e) => {
-                              if (e.target.checked === false) {
-                                // TODO: Study on adding label
-                                // ADD LABEL HERE
-                                onCardLabelChange(item.id, card.id);
-                                addCardLabel();
-                              } else {
-                                // DELETE LABEL HERE
-                              }
-                            }}
-                          >
-                            <Box display="flex" justifyContent="space-between" alignItems="center">
-                              <Text>{item.title}</Text> <Icon as={BiLabel} fontSize="2xl" pl="auto" />
-                            </Box>
-                          </Checkbox>
-                        );
-                      })}
+                      <Checkbox
+                        colorScheme="teal"
+                        isChecked={card.labels.some((item) => item.id === 1)}
+                        value={labels.data?.find((item) => item.id === 1)?.title}
+                        onChange={(e: any) => {
+                          if (card.labels.some((item) => item.id === 1) === false) {
+                            authRequest()
+                              .post('card-label', { cardId: card.id, labelId: 1 })
+                              .then(() => {
+                                dispatch(fetchBoard(id!));
+                              })
+                              .catch((error) => {
+                                console.log('error :>> ', error);
+                              });
+                          } else {
+                            authRequest()
+                              .delete(
+                                `card-label/${card.labels.find((item) => item.CardLabel.labelId === 1)?.CardLabel.id}`
+                              )
+                              .then(() => {
+                                dispatch(fetchBoard(id!));
+                              })
+                              .catch((error) => {
+                                console.log(error);
+                              });
+                          }
+                        }}
+                      >
+                        <Box display="flex" justifyContent="space-between" alignItems="center">
+                          <Text>{labels.data?.find((item) => item.id === 1)?.title}</Text>{' '}
+                          <Icon as={BiLabel} fontSize="2xl" pl="auto" />
+                        </Box>
+                      </Checkbox>
+                      <Checkbox
+                        colorScheme="teal"
+                        isChecked={card.labels.some((item) => item.id === 2)}
+                        value={labels.data?.find((item) => item.id === 2)?.title}
+                        onChange={(e: any) => {
+                          if (card.labels.some((item) => item.id === 2) === false) {
+                            authRequest()
+                              .post('card-label', { cardId: card.id, labelId: 2 })
+                              .then(() => {
+                                dispatch(fetchBoard(id!));
+                              })
+                              .catch((error) => {
+                                console.log('error :>> ', error);
+                              });
+                          } else {
+                            authRequest()
+                              .delete(
+                                `card-label/${card.labels.find((item) => item.CardLabel.labelId === 2)?.CardLabel.id}`
+                              )
+                              .then(() => {
+                                dispatch(fetchBoard(id!));
+                              })
+                              .catch((error) => {
+                                console.log(error);
+                              });
+                          }
+                        }}
+                      >
+                        <Box display="flex" justifyContent="space-between" alignItems="center">
+                          <Text>{labels.data?.find((item) => item.id === 2)?.title}</Text>{' '}
+                          <Icon as={BiLabel} fontSize="2xl" pl="auto" />
+                        </Box>
+                      </Checkbox>
                     </Box>
                   </MenuItem>
                 </MenuList>
