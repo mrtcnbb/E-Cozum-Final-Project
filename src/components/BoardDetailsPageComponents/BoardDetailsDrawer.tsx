@@ -9,13 +9,18 @@ import {
   Text,
   Input,
   Button,
+  Select,
+  Box,
+  Icon,
 } from '@chakra-ui/react';
 import { SettingsIcon } from '@chakra-ui/icons';
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import authRequest from '../../service/authRequest';
 import { useAppDispatch, useAppSelector } from '../../store';
 import { fetchBoard } from '../../features/boardSlice';
+import { fetchUsers } from '../../features/usersSlice';
+import { BiPlus, BiTrashAlt, BiUser, BiUserPlus } from 'react-icons/bi';
 
 interface CreateMemberProps {
   username: string;
@@ -31,12 +36,22 @@ const BoardDetailsDrawer: FC = () => {
 
   const dispatch = useAppDispatch();
 
+  const [selectedUser, setSelectedUser] = useState<string>('');
+
   const [createBoardMemberObject, setCreateBoardMemberObject] = useState<CreateMemberProps>({
-    username: '',
+    username: selectedUser,
     boardId: Number(id!),
   });
 
+  const [users, setUsers] = useState<any>();
+
   const board = useAppSelector((state) => state.boardState);
+
+  useEffect(() => {
+    dispatch(fetchUsers()).then((res) => {
+      setUsers(res.payload);
+    });
+  }, [dispatch]);
 
   const deleteBoard = (id: string) => {
     authRequest()
@@ -48,7 +63,10 @@ const BoardDetailsDrawer: FC = () => {
 
   const addMember = () => {
     authRequest()
-      .post('board-member', createBoardMemberObject)
+      .post('board-member', {
+        username: selectedUser,
+        boardId: Number(id!),
+      })
       .then((res) => {
         dispatch(fetchBoard(id!));
         console.log(createBoardMemberObject);
@@ -56,10 +74,6 @@ const BoardDetailsDrawer: FC = () => {
       .catch((error) => {
         console.log(error);
       });
-  };
-
-  const onMemberTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setCreateBoardMemberObject((prev) => ({ ...prev, username: event.target.value }));
   };
 
   return (
@@ -80,11 +94,45 @@ const BoardDetailsDrawer: FC = () => {
             Settings
           </DrawerHeader>
           <DrawerBody>
-            <Text _hover={{ cursor: 'pointer' }} onClick={() => deleteBoard(id!)}>
-              Delete this board
-            </Text>
-            <Text>Add members to this board:</Text>
-            <Input onChange={(event: React.ChangeEvent<HTMLInputElement>) => onMemberTextChange(event)} />
+            <Box
+              display={'flex'}
+              _hover={{ cursor: 'pointer' }}
+              justifyContent="space-between"
+              alignItems="center"
+              onClick={() => deleteBoard(id!)}
+            >
+              <Text>Delete this board</Text>
+              <Box height={'18px'}>
+                <Icon as={BiTrashAlt} color="gray" fontSize="lg" />
+              </Box>
+            </Box>
+            <br />
+            {users !== 0 && (
+              <Box>
+                <Box display={'flex'} justifyContent="space-between" alignItems="center">
+                  <Text>Select members to add this board</Text>
+                  <Box height={'18px'}>
+                    <Icon as={BiPlus} color="gray" fontSize="lg" />
+                  </Box>
+                </Box>
+                <Select
+                  value={selectedUser}
+                  icon={<Icon as={BiUser} color="gray" fontSize="lg" />}
+                  onChange={(event) => {
+                    setSelectedUser(event.target.value);
+                  }}
+                >
+                  {users?.map((item: any) => {
+                    return (
+                      <option key={item.id} value={item.username}>
+                        {item.username}
+                      </option>
+                    );
+                  })}
+                </Select>
+              </Box>
+            )}
+            <br />
             <Button
               // disabled={createBoardMemberObject.username.trim() === ''}
               colorScheme="teal"

@@ -70,6 +70,7 @@ const AddChecklist: FC<AddChecklistProps> = ({ cardId }) => {
           mb="7px"
           _hover={{ background: 'none' }}
           _focus={{ outline: '0', background: 'none' }}
+          sx={{ _active: 'false' }}
           icon={<BiCheckSquare />}
         />
       </PopoverTrigger>

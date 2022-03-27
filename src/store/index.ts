@@ -5,6 +5,7 @@ import boardSlice from '../features/boardSlice';
 import boardsListSlice from '../features/boardsListSlice';
 import labelsListSlice from '../features/labelsListSlice';
 import triggerSlice from '../features/triggerSlice';
+import usersListSlice from '../features/usersSlice';
 
 const store = configureStore({
   reducer: {
@@ -13,6 +14,7 @@ const store = configureStore({
     boardState: boardSlice,
     triggerState: triggerSlice,
     labelsList: labelsListSlice,
+    usersList: usersListSlice,
   },
 });
 

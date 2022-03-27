@@ -1,33 +1,63 @@
-import { Box, Button } from '@chakra-ui/react';
+import { Box, Button, IconButton, Input, InputGroup, InputRightElement, Text } from '@chakra-ui/react';
 import { RiBarChartBoxLine } from 'react-icons/ri';
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 import EditableText from './EditableText';
 import BoardDetailsDrawer from './BoardDetailsDrawer';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../store';
 import { fetchBoard } from '../../features/boardSlice';
+import authRequest from '../../service/authRequest';
+import { CheckIcon } from '@chakra-ui/icons';
 
 interface BoardDetailsHeaderProps {
   boardName: string;
   boardId: string;
 }
 
+interface UpdateBoardTitleProps {
+  title: string;
+}
+
 const BoardDetailsHeader: FC<BoardDetailsHeaderProps> = ({ boardName, boardId }) => {
   const { id } = useParams();
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(fetchBoard(id!));
   }, [dispatch, id]);
 
+  // const title = useRef<HTMLInputElement>(null);
+
+  // title.current!.value = boardName;
+
   const boardTitle = useAppSelector((state) => state.boardState.data?.title);
 
-  const [editItemName, setEditItemName] = useState(false);
-  const navigate = useNavigate();
+  const boardnameee = boardTitle;
 
-  const handleEditItemName = (isEditable: boolean) => {
-    setEditItemName(isEditable);
+  const [isEditable, setIsEditable] = useState<boolean>(true);
+
+  const [updateBoardTitleObject, setUpdateBoardTitleObject] = useState<UpdateBoardTitleProps>({
+    title: boardName,
+  } as UpdateBoardTitleProps);
+
+  const [boardsName, setBoardsName] = useState(boardnameee);
+
+  const onBoardTitleChange = (event: any) => {
+    setUpdateBoardTitleObject((prev) => ({ ...prev, title: event.target.value }));
   };
+
+  const handleUpdateBoardTitle = () => {
+    authRequest()
+      .put(`board/${id}`, { title: boardsName })
+      .then(() => {
+        dispatch(fetchBoard(id!));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   return (
     <Box bg="purple.500" w="100%" px={5} py={9} display="flex" alignItems="center" justifyContent="space-between">
       <Button
@@ -40,7 +70,7 @@ const BoardDetailsHeader: FC<BoardDetailsHeaderProps> = ({ boardName, boardId })
       >
         Boards
       </Button>
-      <Box>
+      {/* <Box>
         <EditableText
           textSize="lg"
           textColor="white"
@@ -49,7 +79,52 @@ const BoardDetailsHeader: FC<BoardDetailsHeaderProps> = ({ boardName, boardId })
           boardName={boardName}
           handleEditItemName={handleEditItemName}
         />
-      </Box>
+      </Box> */}
+      {isEditable ? (
+        <Box>
+          <Text
+            color={'white'}
+            fontWeight="semibold"
+            fontSize={'18px'}
+            _hover={{ cursor: 'pointer' }}
+            onClick={() => {
+              setIsEditable(false);
+              dispatch(fetchBoard(id!));
+            }}
+          >
+            {boardTitle}
+          </Text>
+        </Box>
+      ) : (
+        <Box>
+          <InputGroup>
+            <Input
+              value={boardsName}
+              fontSize="md"
+              color={'white'}
+              onChange={(event) => {
+                setBoardsName(event.target.value);
+              }}
+            />
+            <InputRightElement
+              onClick={() => {
+                handleUpdateBoardTitle();
+                setIsEditable(true);
+              }}
+            >
+              <IconButton
+                isRound={true}
+                size="sm"
+                variant="none"
+                color="gray.300"
+                aria-label="edit name"
+                _hover={{ color: 'gray.400', bg: 'gray.200' }}
+                icon={<CheckIcon />}
+              />
+            </InputRightElement>
+          </InputGroup>
+        </Box>
+      )}
       <BoardDetailsDrawer />
     </Box>
   );

@@ -51,7 +51,7 @@ const SubCompSettingsMenu: FC<SubCompSettingsMenuProps> = ({
       <MenuButton
         as={IconButton}
         aria-label="Options"
-        size="sm"
+        size="lg"
         variant="none"
         mt={3}
         _focus={{ outline: '0' }}

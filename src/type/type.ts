@@ -105,6 +105,17 @@ export interface Member {
   BoardMember: BoardMember;
 }
 
+export interface UserList {
+  users: User[];
+}
+
+export interface User {
+  id: number;
+  username: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 export interface BoardFromId {
   id: number;
   title: string;

@@ -9,7 +9,7 @@ import authRequest from '../../service/authRequest';
 import { useAppDispatch } from '../../store';
 import { useParams } from 'react-router-dom';
 import { fetchBoard } from '../../features/boardSlice';
-import ChecklistItem from './ModalChecklistItem';
+import ModalChecklistItem from './ModalChecklistItem';
 
 interface CardModalChecklistProps {
   checklist?: Checklist;
@@ -76,10 +76,9 @@ const CardModalChecklist: FC<CardModalChecklistProps> = ({ checklist }) => {
         size="xs"
         colorScheme="teal"
         bg="teal.100"
-        display="inline-block"
       />
       {checklist?.items.map((item) => {
-        return <ChecklistItem key={item.id} checklistItem={item} />;
+        return <ModalChecklistItem key={item.id} checklistItem={item} />;
       })}
       <Box id="ITEM ADD INPUT" display={'flex'} flexDirection="row" alignItems={'center'} gap="10px" pl="45px">
         <Input

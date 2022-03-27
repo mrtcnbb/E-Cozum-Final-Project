@@ -19,7 +19,7 @@ import {
   Avatar,
   Checkbox,
 } from '@chakra-ui/react';
-import { BiCalendar, BiLabel, BiCheckSquare, BiDotsHorizontalRounded, BiX } from 'react-icons/bi';
+import { BiCalendar, BiLabel, BiDotsHorizontalRounded, BiX } from 'react-icons/bi';
 import React, { FC, useEffect, useState } from 'react';
 import { ChevronRightIcon } from '@chakra-ui/icons';
 import { useCookies } from 'react-cookie';
@@ -48,9 +48,7 @@ interface CardModalProps {
 
 const CardModal: FC<CardModalProps> = ({ card, openModal, listName, boardName, handleClose }) => {
   const [cookies, setCookie, removeCookie] = useCookies(['token', 'username']);
-  const [itemName, setItemName] = useState('');
   const [startDate, setStartDate] = useState<Date>(new Date());
-  const [cheklistName, setcheklistName] = useState('');
   const [dueDate, setDueDate] = useState(false);
 
   const { id } = useParams();
@@ -156,6 +154,17 @@ const CardModal: FC<CardModalProps> = ({ card, openModal, listName, boardName, h
                         onChange={(date) => {
                           if (!date) return;
                           setStartDate(date);
+                          console.log(date);
+
+                          authRequest()
+                            .put(`board/${id}`, { duedate: startDate })
+                            .then((res) => {
+                              dispatch(fetchBoard(id!));
+                              console.log('res is: ', res);
+                            })
+                            .catch((error) => {
+                              console.log(error);
+                            });
                           console.log('date: ', format(new Date(date), 'MMM dd yy'));
                           console.log('theDueDate: ', theDueDate);
                           setDueDate(() => !dueDate);
@@ -180,8 +189,8 @@ const CardModal: FC<CardModalProps> = ({ card, openModal, listName, boardName, h
                   <Icon _hover={{ cursor: 'pointer' }} as={BiLabel} color="white" fontSize="2xl" />
                 </MenuButton>
                 <MenuList fontSize="sm">
-                  <MenuItem closeOnSelect={false}>
-                    <Box display={'flex'} flexDirection="column" gap="10px">
+                  <Box display={'flex'} flexDirection="column" gap="10px">
+                    <MenuItem closeOnSelect={false}>
                       <Checkbox
                         colorScheme="teal"
                         isChecked={card.labels.some((item) => item.id === 1)}
@@ -215,6 +224,8 @@ const CardModal: FC<CardModalProps> = ({ card, openModal, listName, boardName, h
                           <Icon as={BiLabel} fontSize="2xl" pl="auto" />
                         </Box>
                       </Checkbox>
+                    </MenuItem>
+                    <MenuItem closeOnSelect={false}>
                       <Checkbox
                         colorScheme="teal"
                         isChecked={card.labels.some((item) => item.id === 2)}
@@ -248,8 +259,8 @@ const CardModal: FC<CardModalProps> = ({ card, openModal, listName, boardName, h
                           <Icon as={BiLabel} fontSize="2xl" pl="auto" />
                         </Box>
                       </Checkbox>
-                    </Box>
-                  </MenuItem>
+                    </MenuItem>
+                  </Box>
                 </MenuList>
               </Menu>
               <AddChecklist cardId={card.id} />
@@ -264,6 +275,7 @@ const CardModal: FC<CardModalProps> = ({ card, openModal, listName, boardName, h
               <Icon
                 as={BiX}
                 _hover={{ cursor: 'pointer' }}
+                mt="10px"
                 ml="auto"
                 fontSize="3xl"
                 color="white"
@@ -424,12 +436,14 @@ const CardModal: FC<CardModalProps> = ({ card, openModal, listName, boardName, h
                   </Box>
                 </Box>
               </Box>
-              <Box id="ACTIVITY SECTION" display="flex" flexDirection="column" gap="5px">
-                <CardModalSection iconType="BiCommentDetail" sectionName="Activity" />
-                {card.comments.map((item) => {
-                  return <CardModalActivity key={item.id} authorName={item.author.username} message={item.message} />;
-                })}
-              </Box>
+              {card.comments.length !== 0 && (
+                <Box id="ACTIVITY SECTION" display="flex" flexDirection="column" gap="5px">
+                  <CardModalSection iconType="BiCommentDetail" sectionName="Activity" />
+                  {card.comments.map((item) => {
+                    return <CardModalActivity key={item.id} authorName={item.author.username} message={item.message} />;
+                  })}
+                </Box>
+              )}
             </Box>
           </ModalBody>
         </ModalContent>

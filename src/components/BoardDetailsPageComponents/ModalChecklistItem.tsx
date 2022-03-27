@@ -48,7 +48,7 @@ const ModalChecklistItem: FC<ChecklistItemProps> = ({ checklistItem }) => {
   };
 
   return (
-    <Box pl="25px" display="flex" flexDirection="row" alignItems="center" gap="10px">
+    <Box pl="15px" display="flex" flexDirection="row" alignItems="center" gap="5px">
       <Checkbox
         isChecked={checklistItem.isChecked}
         onChange={() => {
@@ -73,6 +73,7 @@ const ModalChecklistItem: FC<ChecklistItemProps> = ({ checklistItem }) => {
           }
         }}
         colorScheme="teal"
+        mr={'10px'}
       ></Checkbox>
       {!isEditable ? (
         <Box border={'1px'} borderColor="lightgray" p="15px" width={'full'} rounded={'md'}>

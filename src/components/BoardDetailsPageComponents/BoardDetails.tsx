@@ -2,6 +2,7 @@ import { Box } from '@chakra-ui/react';
 import { FC, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { fetchBoard } from '../../features/boardSlice';
+import authRequest from '../../service/authRequest';
 import { useAppDispatch, useAppSelector } from '../../store';
 import Header from '../HomePageComponents/Header';
 import BoardDetailsHeader from './BoardDetailsHeader';
@@ -11,12 +12,19 @@ import ListBox from './ListBox';
 const BoardDetails: FC = () => {
   const { id } = useParams();
   const board = useAppSelector((state) => state.boardState);
-  const trigger = useAppSelector((state) => state.triggerState);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch(fetchBoard(id as string));
   }, [dispatch, id]);
+
+  useEffect(() => {
+    authRequest()
+      .get('user')
+      .then((res) => {
+        console.log(res.data);
+      });
+  }, []);
 
   return (
     <Box>
