@@ -68,7 +68,11 @@ const CardModalChecklist: FC<CardModalChecklistProps> = ({ checklist }) => {
         </Text>
       </Box>
       <Progress
-        value={(totalIsCheckedItem() / checklist?.items.length!) * 100}
+        value={
+          totalIsCheckedItem() === 0 && checklist?.items.length === 0
+            ? 0
+            : (totalIsCheckedItem() / checklist?.items.length!) * 100
+        }
         size="xs"
         colorScheme="teal"
         bg="teal.100"
