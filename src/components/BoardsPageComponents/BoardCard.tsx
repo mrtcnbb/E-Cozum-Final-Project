@@ -3,9 +3,8 @@ import { Box, Text, Icon } from '@chakra-ui/react';
 import { AddIcon } from '@chakra-ui/icons';
 import { RiBarChartBoxLine } from 'react-icons/ri';
 import { useNavigate } from 'react-router-dom';
-import { useAppDispatch, useAppSelector } from '../../store';
-import { createBoard } from '../../features/boardsListSlice';
-import { fetchBoard } from '../../features/boardSlice';
+import authRequest from '../../service/authRequest';
+import { BoardFromPost } from '../../type/type';
 
 interface BoardCardProps {
   addBoard: boolean;
@@ -14,9 +13,7 @@ interface BoardCardProps {
 }
 
 const BoardCard: FC<BoardCardProps> = ({ addBoard, boardName, boardId }) => {
-  const boardList = useAppSelector((state) => state.boardsList);
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
 
   return (
     <Box
@@ -36,14 +33,12 @@ const BoardCard: FC<BoardCardProps> = ({ addBoard, boardName, boardId }) => {
       flexDirection="column"
       p="2"
       onClick={() => {
-        // debugger;
         if (addBoard) {
-          (async () => {
-            await dispatch(createBoard());
-            const path = boardList.data && boardList.data[boardList.data.length - 1].id;
-            const newPath = boardList.postBoardData;
-            navigate(`/board/${path}`);
-          })();
+          authRequest()
+            .post<BoardFromPost>('board', { title: 'Untitled Board' })
+            .then((res) => {
+              navigate(`board/${res.data.id}`);
+            });
         } else {
           navigate(`/board/${boardId}`);
         }
