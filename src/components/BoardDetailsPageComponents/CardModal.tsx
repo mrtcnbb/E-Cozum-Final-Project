@@ -352,40 +352,42 @@ const CardModal: FC<CardModalProps> = ({ card, openModal, listName, boardName, h
               </Box>
             </Box>
 
-            <Box id="LABES" display="flex" flexDirection="column" gap="5px">
-              <CardModalSection iconType="BiLabel" sectionName="Labels" />
-              <Box
-                display="flex"
-                gap="5px"
-                border="1px"
-                borderColor="gray.300"
-                rounded="lg"
-                p="15px"
-                overflowX={'auto'}
-              >
-                {card.labels.map((item) => {
-                  return (
-                    <CardModalLabel
-                      key={item.id}
-                      labelId={item.id}
-                      deleteLabel={() => handleDeleteCardLabel(item.CardLabel.id)}
-                    />
-                  );
-                })}
-                <Icon
-                  as={BiX}
-                  _hover={{ cursor: 'pointer' }}
-                  ml="auto"
-                  fontSize="3xl"
-                  color="black"
-                  onClick={() => {
-                    card.labels?.forEach((item) => {
-                      deleteCardLabel(item.CardLabel.id);
-                    });
-                  }}
-                />
+            {card.labels.length !== 0 && (
+              <Box id="LABES" display="flex" flexDirection="column" gap="5px">
+                <CardModalSection iconType="BiLabel" sectionName="Labels" />
+                <Box
+                  display="flex"
+                  gap="5px"
+                  border="1px"
+                  borderColor="gray.300"
+                  rounded="lg"
+                  p="15px"
+                  overflowX={'auto'}
+                >
+                  {card.labels.map((item) => {
+                    return (
+                      <CardModalLabel
+                        key={item.id}
+                        labelId={item.id}
+                        deleteLabel={() => handleDeleteCardLabel(item.CardLabel.id)}
+                      />
+                    );
+                  })}
+                  <Icon
+                    as={BiX}
+                    _hover={{ cursor: 'pointer' }}
+                    ml="auto"
+                    fontSize="3xl"
+                    color="black"
+                    onClick={() => {
+                      card.labels?.forEach((item) => {
+                        deleteCardLabel(item.CardLabel.id);
+                      });
+                    }}
+                  />
+                </Box>
               </Box>
-            </Box>
+            )}
             <Box id="CHECKLIST AREA">
               {card.checklists.map((item) => {
                 return <CardModalChecklist key={item.id} checklist={item} />;

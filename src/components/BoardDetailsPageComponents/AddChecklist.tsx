@@ -66,7 +66,7 @@ const AddChecklist: FC<AddChecklistProps> = ({ cardId }) => {
           color="white"
           rounded="full"
           fontSize="2xl"
-          mx="-5px"
+          mx="-10px"
           mb="7px"
           _hover={{ background: 'none' }}
           _focus={{ outline: '0', background: 'none' }}
@@ -75,7 +75,11 @@ const AddChecklist: FC<AddChecklistProps> = ({ cardId }) => {
       </PopoverTrigger>
       <PopoverContent _focus={{ outline: '0' }} mt="7px">
         <PopoverBody display={'flex'} flexDirection="column" gap={'10px'}>
-          <Input value={createChecklistObject.title} onChange={(event) => onCreateChecklist(event)} />
+          <Input
+            placeholder="Checklist title"
+            value={createChecklistObject.title}
+            onChange={(event) => onCreateChecklist(event)}
+          />
           <Button
             disabled={createChecklistObject.title.trim() === ''}
             onClick={() => {
