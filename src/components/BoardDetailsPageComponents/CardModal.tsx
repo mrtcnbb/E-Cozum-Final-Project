@@ -252,18 +252,7 @@ const CardModal: FC<CardModalProps> = ({ card, openModal, listName, boardName, h
                   </MenuItem>
                 </MenuList>
               </Menu>
-              {/* <Menu>
-                <MenuButton>
-                  <Icon _hover={{ cursor: 'pointer' }} as={BiCheckSquare} color="white" fontSize="2xl" />
-                </MenuButton>
-                <MenuList fontSize="sm" boxSize="-moz-fit-content">
-                  <MenuItem closeOnSelect={false}>
-                    <AddChecklist />
-                  </MenuItem>
-                </MenuList>
-              </Menu> */}
               <AddChecklist cardId={card.id} />
-
               <Menu>
                 <MenuButton>
                   <Icon _hover={{ cursor: 'pointer' }} as={BiDotsHorizontalRounded} color="white" fontSize="2xl" />

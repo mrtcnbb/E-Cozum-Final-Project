@@ -29,6 +29,8 @@ const AddChecklist: FC<AddChecklistProps> = ({ cardId }) => {
     cardId: cardId,
   });
 
+  const { onOpen, onClose, isOpen } = useDisclosure();
+
   const { id } = useParams();
   const dispatch = useAppDispatch();
 
@@ -48,7 +50,14 @@ const AddChecklist: FC<AddChecklistProps> = ({ cardId }) => {
   };
 
   return (
-    <Popover closeOnBlur={true} direction="ltr" placement="bottom-start">
+    <Popover
+      onOpen={onOpen}
+      onClose={onClose}
+      isOpen={isOpen}
+      closeOnBlur={true}
+      direction="ltr"
+      placement="bottom-start"
+    >
       <PopoverTrigger>
         <IconButton
           size="lg"
@@ -68,8 +77,10 @@ const AddChecklist: FC<AddChecklistProps> = ({ cardId }) => {
         <PopoverBody display={'flex'} flexDirection="column" gap={'10px'}>
           <Input value={createChecklistObject.title} onChange={(event) => onCreateChecklist(event)} />
           <Button
+            disabled={createChecklistObject.title.trim() === ''}
             onClick={() => {
               addChecklist();
+              onClose();
               setCreateChecklistObject((prev) => ({ ...prev, title: '' }));
             }}
             ml={'auto'}
