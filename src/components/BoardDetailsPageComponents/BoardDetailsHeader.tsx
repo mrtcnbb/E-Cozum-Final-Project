@@ -27,10 +27,6 @@ const BoardDetailsHeader: FC<BoardDetailsHeaderProps> = ({ boardName, boardId })
     dispatch(fetchBoard(id!));
   }, [dispatch, id]);
 
-  // const title = useRef<HTMLInputElement>(null);
-
-  // title.current!.value = boardName;
-
   const boardTitle = useAppSelector((state) => state.boardState.data?.title);
 
   const [isEditable, setIsEditable] = useState<boolean>(true);
