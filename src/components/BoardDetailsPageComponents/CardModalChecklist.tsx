@@ -1,4 +1,4 @@
-import { Box, Icon, Input, Progress, Text, IconButton, Button, Checkbox } from '@chakra-ui/react';
+import { Box, Icon, Input, Progress, Text, IconButton } from '@chakra-ui/react';
 
 import { BiCheckSquare } from 'react-icons/bi';
 import { FC, useState } from 'react';
