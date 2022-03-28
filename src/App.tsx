@@ -10,7 +10,6 @@ import { useCookies } from 'react-cookie';
 import { CookiesProvider } from 'react-cookie';
 
 function App() {
-  // const { token } = useCookies(['token', 'username']);
   const [cookies, setCookie, removeCookie] = useCookies(['token', 'username']);
   const authState = useAppSelector((state) => state.authState);
 
