@@ -33,15 +33,13 @@ const BoardDetailsHeader: FC<BoardDetailsHeaderProps> = ({ boardName, boardId })
 
   const boardTitle = useAppSelector((state) => state.boardState.data?.title);
 
-  const boardnameee = boardTitle;
-
   const [isEditable, setIsEditable] = useState<boolean>(true);
 
   const [updateBoardTitleObject, setUpdateBoardTitleObject] = useState<UpdateBoardTitleProps>({
     title: boardName,
   } as UpdateBoardTitleProps);
 
-  const [boardsName, setBoardsName] = useState(boardnameee);
+  const [boardsName, setBoardsName] = useState(boardTitle);
 
   const onBoardTitleChange = (event: any) => {
     setUpdateBoardTitleObject((prev) => ({ ...prev, title: event.target.value }));
@@ -57,6 +55,12 @@ const BoardDetailsHeader: FC<BoardDetailsHeaderProps> = ({ boardName, boardId })
         console.log(error);
       });
   };
+
+  useEffect(() => {
+    if (boardTitle) {
+      setBoardsName(boardTitle);
+    }
+  }, [boardTitle]);
 
   return (
     <Box bg="purple.500" w="100%" px={5} py={9} display="flex" alignItems="center" justifyContent="space-between">
@@ -99,6 +103,7 @@ const BoardDetailsHeader: FC<BoardDetailsHeaderProps> = ({ boardName, boardId })
         <Box>
           <InputGroup>
             <Input
+              //TODO: INPUT VALUE NE OLMALI
               value={boardsName}
               fontSize="md"
               color={'white'}
