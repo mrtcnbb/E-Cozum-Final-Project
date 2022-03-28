@@ -35,7 +35,7 @@ import { fetchLabels } from '../../features/labelsListSlice';
 import CardModalActivity from './CardModalActivity';
 import CardModalChecklist from './CardModalChecklist';
 import AddChecklist from './AddChecklist';
-import ModalDuedate from './ModalDueDate';
+import ModalDuedate from './ModalDuedate';
 import ModalUpdateDuedate from './ModalUpdateDuedate';
 
 interface CardModalProps {
@@ -378,8 +378,8 @@ const CardModal: FC<CardModalProps> = ({ card, openModal, listName, boardName, h
                 </Box>
               </Box>
             )}
-            <Box id="CHECKLIST AREA">
-              {card.checklists.map((item) => {
+            <Box id="CHECKLIST AREA" display={card.checklists.length === 0 ? 'none' : 'block'}>
+              {card.checklists?.map((item) => {
                 return <CardModalChecklist key={item.id} checklist={item} />;
               })}
             </Box>
