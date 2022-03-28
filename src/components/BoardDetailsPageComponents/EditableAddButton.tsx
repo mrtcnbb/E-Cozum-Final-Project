@@ -92,7 +92,7 @@ const EditableAddButton: FC<EditableAddButtonProps> = ({ item, listId }) => {
       border={item === 'list' ? '1px' : 'none'}
       borderColor="rgb(230,230,230)"
       p={item === 'card' ? '2' : '3.5'}
-      backgroundColor="#F9F9F9"
+      backgroundColor="rgb(245,245,245)"
       boxShadow={item === 'card' ? 'none' : 'md'}
       width={item === 'card' ? 'full' : '320px'}
       borderRadius="2xl"
