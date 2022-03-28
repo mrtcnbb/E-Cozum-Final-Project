@@ -7,7 +7,6 @@ import {
   IconButton,
   useDisclosure,
   Text,
-  Input,
   Button,
   Select,
   Box,
@@ -20,7 +19,7 @@ import authRequest from '../../service/authRequest';
 import { useAppDispatch, useAppSelector } from '../../store';
 import { fetchBoard } from '../../features/boardSlice';
 import { fetchUsers } from '../../features/usersSlice';
-import { BiPlus, BiTrashAlt, BiUser, BiUserPlus } from 'react-icons/bi';
+import { BiPlus, BiTrashAlt, BiUser } from 'react-icons/bi';
 import MemberTag from './MemberTag';
 
 interface CreateMemberProps {
@@ -68,7 +67,7 @@ const BoardDetailsDrawer: FC = () => {
         username: selectedUser,
         boardId: Number(id!),
       })
-      .then((res) => {
+      .then(() => {
         dispatch(fetchBoard(id!));
         console.log(createBoardMemberObject);
       })
@@ -119,6 +118,7 @@ const BoardDetailsDrawer: FC = () => {
                       </Box>
                     </Box>
                     <Select
+                      placeholder="Select member"
                       value={selectedUser}
                       icon={<Icon as={BiUser} fontSize="lg" />}
                       onChange={(event) => {
@@ -145,6 +145,8 @@ const BoardDetailsDrawer: FC = () => {
                       if (selectedUser === board.data?.owner.username) {
                         alert('You cannot add board owner to board members');
                         return;
+                      } else if (board.data?.members.some((item) => item.username === selectedUser)) {
+                        alert('This user is already a member of this board');
                       } else {
                         addMember();
                       }
