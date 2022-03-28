@@ -5,6 +5,7 @@ import { useAppDispatch, useAppSelector } from '../../store';
 import CardBox from './CardBox';
 import EditableAddButton from './EditableAddButton';
 import NameSettingsHolder from './NameSettingsHolder';
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
 interface ListBoxProps {
   listId: number;
@@ -17,7 +18,14 @@ const ListBox: FC<ListBoxProps> = ({ listId, listName, boardName, cards }) => {
   const list = useAppSelector((state) => state.boardState.data?.lists.find((item) => item.id === listId));
 
   return (
-    <Box bg="#F9F9F9" borderRadius="2xl" boxShadow="sm" width={320} border="1px" borderColor="rgb(230,230,230)">
+    <Box
+      bg="rgb(245,245,245)"
+      borderRadius="2xl"
+      boxShadow="sm"
+      width={320}
+      border="1px"
+      borderColor="rgb(230,230,230)"
+    >
       <Box pb="15px" width={320}>
         <NameSettingsHolder subCompName="list" listId={listId} listName={listName} />
       </Box>
@@ -37,7 +45,7 @@ const ListBox: FC<ListBoxProps> = ({ listId, listName, boardName, cards }) => {
           },
         }}
       >
-        <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" gap="16px" py="20px">
+        <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" gap="20px" py="20px">
           {list?.cards?.map((item) => {
             return (
               <CardBox
