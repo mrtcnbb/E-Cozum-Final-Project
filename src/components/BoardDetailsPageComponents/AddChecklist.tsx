@@ -1,18 +1,14 @@
 import {
-  Box,
   Button,
-  Icon,
   IconButton,
   Input,
   Popover,
   PopoverBody,
-  PopoverCloseButton,
   PopoverContent,
   PopoverTrigger,
   useDisclosure,
-  usePopoverContext,
 } from '@chakra-ui/react';
-import React, { FC, useState, useRef } from 'react';
+import React, { FC, useState } from 'react';
 import { BiCheckSquare } from 'react-icons/bi';
 import { useParams } from 'react-router-dom';
 import { fetchBoard } from '../../features/boardSlice';
