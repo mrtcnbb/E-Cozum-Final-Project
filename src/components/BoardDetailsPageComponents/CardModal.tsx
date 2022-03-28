@@ -23,8 +23,6 @@ import { BiCalendar, BiLabel, BiDotsHorizontalRounded, BiX } from 'react-icons/b
 import React, { FC, useEffect, useState } from 'react';
 import { ChevronRightIcon } from '@chakra-ui/icons';
 import { useCookies } from 'react-cookie';
-
-import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { format } from 'date-fns';
 import CardModalLabel from './CardModalLabel';
@@ -37,6 +35,8 @@ import { fetchLabels } from '../../features/labelsListSlice';
 import CardModalActivity from './CardModalActivity';
 import CardModalChecklist from './CardModalChecklist';
 import AddChecklist from './AddChecklist';
+import ModalDuedate from './ModalDueDate';
+import ModalUpdateDuedate from './ModalUpdateDuedate';
 
 interface CardModalProps {
   card: Card;
@@ -49,7 +49,7 @@ interface CardModalProps {
 const CardModal: FC<CardModalProps> = ({ card, openModal, listName, boardName, handleClose }) => {
   const [cookies, setCookie, removeCookie] = useCookies(['token', 'username']);
   const [startDate, setStartDate] = useState<Date>(new Date());
-  const [dueDate, setDueDate] = useState(false);
+  const [dueDate, setDueDate] = useState(card.duedate && card.duedate !== '2010-01-01');
 
   const { id } = useParams();
 
@@ -71,8 +71,6 @@ const CardModal: FC<CardModalProps> = ({ card, openModal, listName, boardName, h
   }, [dispatch]);
 
   const labels = useAppSelector((state) => state.labelsList);
-
-  const theDueDate = format(new Date(startDate), 'MMM dd yyyy');
 
   const onCardTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUpdateCardObject((prev) => ({ ...prev, title: event.target.value }));
@@ -146,42 +144,20 @@ const CardModal: FC<CardModalProps> = ({ card, openModal, listName, boardName, h
                   <Icon _hover={{ cursor: 'pointer' }} as={BiCalendar} color="white" fontSize="2xl" />
                 </MenuButton>
                 <MenuList fontSize="sm" boxSize="min-content" px={5}>
-                  {!dueDate && (
-                    <MenuItem as={Box} closeOnSelect={false} _hover={{ background: 'none' }}>
-                      <DatePicker
-                        dateFormat="yyyy/MM/dd"
-                        selected={startDate}
-                        onChange={(date) => {
-                          if (!date) return;
-                          setStartDate(date);
-                          console.log(date);
-
-                          authRequest()
-                            .put(`board/${id}`, { duedate: startDate })
-                            .then((res) => {
-                              dispatch(fetchBoard(id!));
-                              console.log('res is: ', res);
-                            })
-                            .catch((error) => {
-                              console.log(error);
-                            });
-                          console.log('date: ', format(new Date(date), 'MMM dd yy'));
-                          console.log('theDueDate: ', theDueDate);
-                          setDueDate(() => !dueDate);
-                        }}
-                      />
-                    </MenuItem>
-                  )}
-                  {dueDate && (
-                    <MenuItem
+                  <MenuItem as={Box} closeOnSelect={false}>
+                    <ModalDuedate cardId={card.id} />
+                  </MenuItem>
+                  {/* <MenuItem
                       onClick={() => {
-                        setStartDate(new Date());
-                        setDueDate(false);
+                        authRequest()
+                          .put(`card/${card.id}`, { duedate: '2010-01-01' })
+                          .then(() => {
+                            dispatch(fetchBoard(id!));
+                          });
                       }}
                     >
-                      Remove Due Date
-                    </MenuItem>
-                  )}
+                      Remove
+                    </MenuItem> */}
                 </MenuList>
               </Menu>
               <Menu>
@@ -317,10 +293,12 @@ const CardModal: FC<CardModalProps> = ({ card, openModal, listName, boardName, h
                     <Text>{listName}</Text>
                   </BreadcrumbItem>
                 </Breadcrumb>
-                {dueDate && (
+
+                {card.duedate && (
                   <Box
                     display={'flex'}
                     flexDirection="row"
+                    gap="5px"
                     border="1px"
                     borderColor="gray.300"
                     rounded="lg"
@@ -328,7 +306,11 @@ const CardModal: FC<CardModalProps> = ({ card, openModal, listName, boardName, h
                     py="10px"
                     fontSize="sm"
                   >
-                    <DatePicker selected={startDate} onChange={(date) => setStartDate(date!)} />
+                    <Text>Duedate:</Text>
+                    <ModalUpdateDuedate
+                      cardDuedate={card.duedate ? card.duedate : format(new Date(), 'yyyy-MM-dd')}
+                      cardId={card.id}
+                    />
                   </Box>
                 )}
               </Box>
@@ -338,11 +320,7 @@ const CardModal: FC<CardModalProps> = ({ card, openModal, listName, boardName, h
                   size="lg"
                   fontSize="sm"
                   value={updateCardObject.title}
-                  onKeyUp={() => {
-                    setTimeout(() => {
-                      updateCardTitleDescriptionDueDate();
-                    }, 2.0 * 1000);
-                  }}
+                  onKeyUp={updateCardTitleDescriptionDueDate}
                   onChange={(event: React.ChangeEvent<HTMLInputElement>) => onCardTitleChange(event)}
                 />
               </Box>
