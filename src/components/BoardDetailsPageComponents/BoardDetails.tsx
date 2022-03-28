@@ -15,25 +15,17 @@ const BoardDetails: FC = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(fetchBoard(id as string));
+    dispatch(fetchBoard(id!));
   }, [dispatch, id]);
 
-  useEffect(() => {
-    authRequest()
-      .get('user')
-      .then((res) => {
-        console.log(res.data);
-      });
-  }, []);
-
   return (
-    <Box>
-      {id}
+    <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       <Header />
-      <BoardDetailsHeader boardName={board.data?.title as string} boardId={id as string} />
+      <BoardDetailsHeader boardName={board.data?.title!} boardId={id!} />
       <Box
         p="4"
         sx={{
+          flex: '1',
           display: 'flex',
           flexDirection: 'row',
           overflowY: 'auto',
