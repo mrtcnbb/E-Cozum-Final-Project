@@ -1,13 +1,13 @@
 import { Box, Text, Icon } from '@chakra-ui/react';
 import { BiCommentDetail, BiFile } from 'react-icons/bi';
 import MiniLabel from './MiniLabel';
-import CardTag from './CardTag';
-import { FC, useEffect, useState } from 'react';
+import CardCheckTag from './CardCheckTag';
+import { FC, useState } from 'react';
 import { Card } from '../../features/boardSlice';
-import { useAppDispatch, useAppSelector } from '../../store';
+import { useAppSelector } from '../../store';
 import CardModal from './CardModal';
 import React from 'react';
-import { Item } from 'framer-motion/types/components/Reorder/Item';
+import CardDateTag from './CardDateTag';
 
 interface CardBoxProps {
   cardProp: Card;
@@ -15,6 +15,7 @@ interface CardBoxProps {
   listId: number;
   listName: string;
   boardName: string;
+  ref?: any;
 }
 
 const CardBox: FC<CardBoxProps> = ({ cardProp, cardId, listId, listName, boardName }) => {
@@ -55,16 +56,16 @@ const CardBox: FC<CardBoxProps> = ({ cardProp, cardId, listId, listName, boardNa
     });
     return totalCheckeds;
   };
+
   return (
     <Box
-      bg="#F9F9F9"
+      bg="rgb(250,250,250)"
       _hover={{ cursor: 'pointer' }}
       onClick={onOpen}
       ref={divRef}
       borderRadius="2xl"
       boxShadow="sm"
       width={286}
-      m={5}
       border="1px"
       borderColor="rgb(230,230,230)"
     >
@@ -76,15 +77,10 @@ const CardBox: FC<CardBoxProps> = ({ cardProp, cardId, listId, listName, boardNa
         </Box>
         <Text my="18px">{card?.title}</Text>
         <Box display="flex" justifyContent="start" gap="5px">
+          {card?.duedate && <CardDateTag dueDate={card?.duedate} />}
           {card?.checklists.length !== 0 && (
-            <CardTag
-              tagType="checkRatio"
-              totalCheckeds={() => calculateTotalCheckeds()}
-              totalChecks={() => calculateTotalChecks()}
-            />
+            <CardCheckTag totalCheckeds={() => calculateTotalCheckeds()} totalChecks={() => calculateTotalChecks()} />
           )}
-          {/* <CardTag tagType="dueDate" />
-          <CardTag tagType="checkRatio" /> */}
         </Box>
       </Box>
 
