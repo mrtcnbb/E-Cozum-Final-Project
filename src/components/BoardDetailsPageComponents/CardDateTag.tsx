@@ -1,6 +1,6 @@
 import { Tag, TagLeftIcon, TagLabel } from '@chakra-ui/react';
 import { format } from 'date-fns/esm';
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { BiTimeFive } from 'react-icons/bi';
 
 interface CardCheckTagProps {
