@@ -77,7 +77,7 @@ const CardBox: FC<CardBoxProps> = ({ cardProp, cardId, listId, listName, boardNa
         </Box>
         <Text my="18px">{card?.title}</Text>
         <Box display="flex" justifyContent="start" gap="5px">
-          {card?.duedate && <CardDateTag dueDate={card?.duedate} />}
+          {card?.duedate && card?.duedate !== '2010-01-01' && <CardDateTag dueDate={card?.duedate} />}
           {card?.checklists.length !== 0 && (
             <CardCheckTag totalCheckeds={() => calculateTotalCheckeds()} totalChecks={() => calculateTotalChecks()} />
           )}

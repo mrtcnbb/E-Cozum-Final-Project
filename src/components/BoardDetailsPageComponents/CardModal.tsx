@@ -144,10 +144,8 @@ const CardModal: FC<CardModalProps> = ({ card, openModal, listName, boardName, h
                   <Icon _hover={{ cursor: 'pointer' }} as={BiCalendar} color="white" fontSize="2xl" />
                 </MenuButton>
                 <MenuList fontSize="sm" boxSize="min-content" px={5}>
-                  <MenuItem as={Box} closeOnSelect={false}>
-                    <ModalDuedate cardId={card.id} />
-                  </MenuItem>
-                  {/* <MenuItem
+                  {card.duedate && card.duedate !== '2010-01-01' ? (
+                    <MenuItem
                       onClick={() => {
                         authRequest()
                           .put(`card/${card.id}`, { duedate: '2010-01-01' })
@@ -156,8 +154,13 @@ const CardModal: FC<CardModalProps> = ({ card, openModal, listName, boardName, h
                           });
                       }}
                     >
-                      Remove
-                    </MenuItem> */}
+                      Remove Duedate
+                    </MenuItem>
+                  ) : (
+                    <MenuItem as={Box} closeOnSelect={false}>
+                      <ModalDuedate cardId={card.id} />
+                    </MenuItem>
+                  )}
                 </MenuList>
               </Menu>
               <Menu>
@@ -294,7 +297,7 @@ const CardModal: FC<CardModalProps> = ({ card, openModal, listName, boardName, h
                   </BreadcrumbItem>
                 </Breadcrumb>
 
-                {card.duedate && (
+                {card.duedate && card.duedate !== '2010-01-01' && (
                   <Box
                     display={'flex'}
                     flexDirection="row"
