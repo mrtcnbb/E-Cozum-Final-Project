@@ -10,11 +10,10 @@ import { useCookies } from 'react-cookie';
 import { CookiesProvider } from 'react-cookie';
 
 function App() {
-  const [cookies, setCookie, removeCookie] = useCookies(['token', 'username']);
+  const [cookies] = useCookies(['token', 'username']);
   const authState = useAppSelector((state) => state.authState);
 
   const { isLogged } = authState;
-  console.log('isLogged :>> ', isLogged);
   const dispatch = useAppDispatch();
 
   useEffect(() => {

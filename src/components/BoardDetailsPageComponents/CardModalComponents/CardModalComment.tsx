@@ -14,7 +14,7 @@ interface CardModalCommentProps {
 const CardModalComment: FC<CardModalCommentProps> = ({ cardId }) => {
   const { id } = useParams();
   const dispatch = useAppDispatch();
-  const [cookies, setCookie, removeCookie] = useCookies(['token', 'username']);
+  const [cookies] = useCookies(['token', 'username']);
 
   const [createCommentObject, setCreateCommentObject] = useState({
     cardId: cardId,
