@@ -24,14 +24,18 @@ const BoardDetailsHeader: FC = () => {
   const [boardsName, setBoardsName] = useState(boardTitle);
 
   const handleUpdateBoardTitle = () => {
-    authRequest()
-      .put(`board/${id}`, { title: boardsName })
-      .then(() => {
-        dispatch(fetchBoard(id!));
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    if (boardsName === '') {
+      alert('Borad must have a name!');
+    } else {
+      authRequest()
+        .put(`board/${id}`, { title: boardsName })
+        .then(() => {
+          dispatch(fetchBoard(id!));
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   };
 
   useEffect(() => {
