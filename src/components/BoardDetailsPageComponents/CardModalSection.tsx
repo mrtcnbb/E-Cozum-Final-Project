@@ -1,6 +1,6 @@
 import { Box, Icon, Text } from '@chakra-ui/react';
 import { BiCommentDetail, BiLabel, BiListUl } from 'react-icons/bi';
-import React, { FC } from 'react';
+import { FC } from 'react';
 
 interface CardModalSectionProps {
   iconType: 'BiListUl' | 'BiLabel' | 'BiCommentDetail';
