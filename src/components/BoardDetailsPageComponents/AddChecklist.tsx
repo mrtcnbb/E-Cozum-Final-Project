@@ -8,7 +8,7 @@ import {
   PopoverTrigger,
   useDisclosure,
 } from '@chakra-ui/react';
-import React, { FC, useState } from 'react';
+import { FC, useState } from 'react';
 import { BiCheckSquare } from 'react-icons/bi';
 import { useParams } from 'react-router-dom';
 import { fetchBoard } from '../../features/boardSlice';
