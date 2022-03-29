@@ -73,7 +73,9 @@ const CardBox: FC<CardBoxProps> = ({ cardId, listId, listName, boardName }) => {
             return <MiniLabel labelId={item.id} key={item.id} />;
           })}
         </Box>
-        <Text my="18px">{card?.title}</Text>
+        <Text width={'90%'} overflow="hidden" textOverflow={'ellipsis'} whiteSpace="nowrap" my="18px">
+          {card?.title}
+        </Text>
         <Box display="flex" justifyContent="start" gap="5px">
           {card?.duedate && card?.duedate !== '2010-01-01' && <CardDateTag dueDate={card?.duedate} />}
           {card?.checklists.length !== 0 && (
