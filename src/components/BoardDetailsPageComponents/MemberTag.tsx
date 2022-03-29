@@ -1,5 +1,5 @@
 import { Tag, TagCloseButton, TagLabel } from '@chakra-ui/react';
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { useParams } from 'react-router-dom';
 import { fetchBoard } from '../../features/boardSlice';
 import authRequest from '../../service/authRequest';

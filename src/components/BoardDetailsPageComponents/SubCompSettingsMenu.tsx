@@ -3,7 +3,7 @@ import { Menu, MenuButton, Icon, IconButton, MenuList, MenuItem } from '@chakra-
 import { FC } from 'react';
 import authRequest from '../../service/authRequest';
 import { BiDotsVerticalRounded } from 'react-icons/bi';
-import { useAppDispatch, useAppSelector } from '../../store';
+import { useAppDispatch } from '../../store';
 import { fetchBoard } from '../../features/boardSlice';
 import { useParams } from 'react-router-dom';
 

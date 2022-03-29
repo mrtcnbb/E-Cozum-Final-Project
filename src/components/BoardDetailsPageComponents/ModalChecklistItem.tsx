@@ -1,5 +1,5 @@
 import { Box, Checkbox, IconButton, Input, Text } from '@chakra-ui/react';
-import React, { FC, useState } from 'react';
+import { FC, useState } from 'react';
 import { BiTrashAlt } from 'react-icons/bi';
 import { useParams } from 'react-router-dom';
 import { fetchBoard } from '../../features/boardSlice';
