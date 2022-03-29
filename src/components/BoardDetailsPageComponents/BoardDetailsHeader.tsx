@@ -1,7 +1,6 @@
 import { Box, Button, IconButton, Input, InputGroup, InputRightElement, Text } from '@chakra-ui/react';
 import { RiBarChartBoxLine } from 'react-icons/ri';
-import { FC, useEffect, useRef, useState } from 'react';
-import EditableText from './EditableText';
+import { FC, useEffect, useState } from 'react';
 import BoardDetailsDrawer from './BoardDetailsDrawer';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../store';
@@ -9,16 +8,7 @@ import { fetchBoard } from '../../features/boardSlice';
 import authRequest from '../../service/authRequest';
 import { CheckIcon } from '@chakra-ui/icons';
 
-interface BoardDetailsHeaderProps {
-  boardName: string;
-  boardId: string;
-}
-
-interface UpdateBoardTitleProps {
-  title: string;
-}
-
-const BoardDetailsHeader: FC<BoardDetailsHeaderProps> = ({ boardName, boardId }) => {
+const BoardDetailsHeader: FC = () => {
   const { id } = useParams();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -31,15 +21,7 @@ const BoardDetailsHeader: FC<BoardDetailsHeaderProps> = ({ boardName, boardId })
 
   const [isEditable, setIsEditable] = useState<boolean>(true);
 
-  const [updateBoardTitleObject, setUpdateBoardTitleObject] = useState<UpdateBoardTitleProps>({
-    title: boardName,
-  } as UpdateBoardTitleProps);
-
   const [boardsName, setBoardsName] = useState(boardTitle);
-
-  const onBoardTitleChange = (event: any) => {
-    setUpdateBoardTitleObject((prev) => ({ ...prev, title: event.target.value }));
-  };
 
   const handleUpdateBoardTitle = () => {
     authRequest()
@@ -70,16 +52,6 @@ const BoardDetailsHeader: FC<BoardDetailsHeaderProps> = ({ boardName, boardId })
       >
         Boards
       </Button>
-      {/* <Box>
-        <EditableText
-          textSize="lg"
-          textColor="white"
-          editItemName={editItemName}
-          boardId={boardId}
-          boardName={boardName}
-          handleEditItemName={handleEditItemName}
-        />
-      </Box> */}
       {isEditable ? (
         <Box>
           <Text
@@ -99,10 +71,10 @@ const BoardDetailsHeader: FC<BoardDetailsHeaderProps> = ({ boardName, boardId })
         <Box>
           <InputGroup>
             <Input
-              //TODO: INPUT VALUE NE OLMALI
               value={boardsName}
               fontSize="md"
-              color={'white'}
+              color={'black'}
+              bg="wheat"
               onChange={(event) => {
                 setBoardsName(event.target.value);
               }}
