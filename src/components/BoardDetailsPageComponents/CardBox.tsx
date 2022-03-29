@@ -3,14 +3,12 @@ import { BiCommentDetail, BiFile } from 'react-icons/bi';
 import MiniLabel from './MiniLabel';
 import CardCheckTag from './CardCheckTag';
 import { FC, useState } from 'react';
-import { Card } from '../../features/boardSlice';
 import { useAppSelector } from '../../store';
 import CardModal from './CardModal';
 import React from 'react';
 import CardDateTag from './CardDateTag';
 
 interface CardBoxProps {
-  cardProp: Card;
   cardId: number;
   listId: number;
   listName: string;
@@ -18,7 +16,7 @@ interface CardBoxProps {
   ref?: any;
 }
 
-const CardBox: FC<CardBoxProps> = ({ cardProp, cardId, listId, listName, boardName }) => {
+const CardBox: FC<CardBoxProps> = ({ cardId, listId, listName, boardName }) => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const onOpen = () => {
