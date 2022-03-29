@@ -2,7 +2,6 @@ import { Box } from '@chakra-ui/react';
 import { FC, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { fetchBoard } from '../../features/boardSlice';
-import authRequest from '../../service/authRequest';
 import { useAppDispatch, useAppSelector } from '../../store';
 import Header from '../HomePageComponents/Header';
 import BoardDetailsHeader from './BoardDetailsHeader';
@@ -21,7 +20,7 @@ const BoardDetails: FC = () => {
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       <Header />
-      <BoardDetailsHeader boardName={board.data?.title!} boardId={id!} />
+      <BoardDetailsHeader />
       <Box
         p="4"
         sx={{
