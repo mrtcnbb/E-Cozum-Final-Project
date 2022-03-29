@@ -2,16 +2,16 @@ import { Box, Checkbox, IconButton, Input, Text } from '@chakra-ui/react';
 import { FC, useState } from 'react';
 import { BiTrashAlt } from 'react-icons/bi';
 import { useParams } from 'react-router-dom';
-import { fetchBoard } from '../../features/boardSlice';
-import authRequest from '../../service/authRequest';
-import { useAppDispatch } from '../../store';
-import { ChecklistItem } from '../../type/type';
+import { fetchBoard } from '../../../features/boardSlice';
+import authRequest from '../../../service/authRequest';
+import { useAppDispatch } from '../../../store';
+import { ChecklistItem } from '../../../type/type';
 
-interface ChecklistItemProps {
+interface CardModalChecklistItemProps {
   checklistItem: ChecklistItem;
 }
 
-const ModalChecklistItem: FC<ChecklistItemProps> = ({ checklistItem }) => {
+const CardModalChecklistItem: FC<CardModalChecklistItemProps> = ({ checklistItem }) => {
   const { id } = useParams();
   const dispatch = useAppDispatch();
 
@@ -113,4 +113,4 @@ const ModalChecklistItem: FC<ChecklistItemProps> = ({ checklistItem }) => {
   );
 };
 
-export default ModalChecklistItem;
+export default CardModalChecklistItem;

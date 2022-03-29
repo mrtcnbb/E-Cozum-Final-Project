@@ -1,5 +1,4 @@
 import {
-  Button,
   Modal,
   ModalOverlay,
   ModalContent,
@@ -12,31 +11,28 @@ import {
   MenuButton,
   MenuItem,
   MenuList,
-  Breadcrumb,
-  BreadcrumbItem,
   Input,
   Textarea,
-  Avatar,
   Checkbox,
 } from '@chakra-ui/react';
 import { BiCalendar, BiLabel, BiDotsHorizontalRounded, BiX } from 'react-icons/bi';
 import React, { FC, useEffect, useState } from 'react';
-import { ChevronRightIcon } from '@chakra-ui/icons';
-import { useCookies } from 'react-cookie';
 import 'react-datepicker/dist/react-datepicker.css';
 import { format } from 'date-fns';
 import CardModalLabel from './CardModalLabel';
 import CardModalSection from './CardModalSection';
-import { Card, fetchBoard } from '../../features/boardSlice';
-import authRequest from '../../service/authRequest';
-import { useAppDispatch, useAppSelector } from '../../store';
+import { Card, fetchBoard } from '../../../features/boardSlice';
+import authRequest from '../../../service/authRequest';
+import { useAppDispatch, useAppSelector } from '../../../store';
 import { useParams } from 'react-router-dom';
-import { fetchLabels } from '../../features/labelsListSlice';
+import { fetchLabels } from '../../../features/labelsListSlice';
 import CardModalActivity from './CardModalActivity';
 import CardModalChecklist from './CardModalChecklist';
-import AddChecklist from './AddChecklist';
-import ModalDuedate from './ModalDuedate';
-import ModalUpdateDuedate from './ModalUpdateDuedate';
+import CardModalAddChecklist from './CardModalAddChecklist';
+import CardModalDuedate from './CardModalDuedate';
+import CardModalUpdateDuedate from './CardModalUpdateDuedate';
+import CardModalBreadcrumb from './CardModalBreadcrumb';
+import CardModalComment from './CardModalComment';
 
 interface CardModalProps {
   card: Card;
@@ -47,21 +43,12 @@ interface CardModalProps {
 }
 
 const CardModal: FC<CardModalProps> = ({ card, openModal, listName, boardName, handleClose }) => {
-  const [cookies, setCookie, removeCookie] = useCookies(['token', 'username']);
-  const [startDate, setStartDate] = useState<Date>(new Date());
-  const [dueDate, setDueDate] = useState(card.duedate && card.duedate !== '2010-01-01');
-
   const { id } = useParams();
 
   const [updateCardObject, setUpdateCardObject] = useState({
     title: card.title!,
     description: card.description!,
     listId: card.listId,
-  });
-
-  const [createCommentObject, setCreateCommentObject] = useState({
-    cardId: card.id,
-    message: '',
   });
 
   const dispatch = useAppDispatch();
@@ -80,10 +67,6 @@ const CardModal: FC<CardModalProps> = ({ card, openModal, listName, boardName, h
     setUpdateCardObject((prev) => ({ ...prev, description: event.target.value }));
   };
 
-  const onCardCommentChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setCreateCommentObject((prev) => ({ ...prev, message: event.target.value }));
-  };
-
   const deleteCard = () => {
     authRequest()
       .delete(`card/${card.id}`)
@@ -98,17 +81,6 @@ const CardModal: FC<CardModalProps> = ({ card, openModal, listName, boardName, h
   const updateCardTitleDescriptionDueDate = () => {
     authRequest()
       .put(`card/${card.id}`, updateCardObject)
-      .then(() => {
-        dispatch(fetchBoard(id!));
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
-  const createCardComment = () => {
-    authRequest()
-      .post(`comment`, createCommentObject)
       .then(() => {
         dispatch(fetchBoard(id!));
       })
@@ -158,7 +130,7 @@ const CardModal: FC<CardModalProps> = ({ card, openModal, listName, boardName, h
                     </MenuItem>
                   ) : (
                     <MenuItem as={Box} closeOnSelect={false}>
-                      <ModalDuedate cardId={card.id} />
+                      <CardModalDuedate cardId={card.id} />
                     </MenuItem>
                   )}
                 </MenuList>
@@ -174,7 +146,7 @@ const CardModal: FC<CardModalProps> = ({ card, openModal, listName, boardName, h
                         colorScheme="teal"
                         isChecked={card.labels.some((item) => item.id === 1)}
                         value={labels.data?.find((item) => item.id === 1)?.title}
-                        onChange={(e: any) => {
+                        onChange={() => {
                           if (card.labels.some((item) => item.id === 1) === false) {
                             authRequest()
                               .post('card-label', { cardId: card.id, labelId: 1 })
@@ -209,7 +181,7 @@ const CardModal: FC<CardModalProps> = ({ card, openModal, listName, boardName, h
                         colorScheme="teal"
                         isChecked={card.labels.some((item) => item.id === 2)}
                         value={labels.data?.find((item) => item.id === 2)?.title}
-                        onChange={(e: any) => {
+                        onChange={() => {
                           if (card.labels.some((item) => item.id === 2) === false) {
                             authRequest()
                               .post('card-label', { cardId: card.id, labelId: 2 })
@@ -242,7 +214,7 @@ const CardModal: FC<CardModalProps> = ({ card, openModal, listName, boardName, h
                   </Box>
                 </MenuList>
               </Menu>
-              <AddChecklist cardId={card.id} />
+              <CardModalAddChecklist cardId={card.id} />
               <Menu>
                 <MenuButton>
                   <Icon _hover={{ cursor: 'pointer' }} as={BiDotsHorizontalRounded} color="white" fontSize="2xl" />
@@ -288,15 +260,7 @@ const CardModal: FC<CardModalProps> = ({ card, openModal, listName, boardName, h
                 justifyContent="space-between"
                 alignItems="center"
               >
-                <Breadcrumb spacing="4px" separator={<ChevronRightIcon color="gray.500" />}>
-                  <BreadcrumbItem>
-                    <Text>{boardName}</Text>
-                  </BreadcrumbItem>
-                  <BreadcrumbItem>
-                    <Text>{listName}</Text>
-                  </BreadcrumbItem>
-                </Breadcrumb>
-
+                <CardModalBreadcrumb boardName={boardName} listName={listName} />
                 {card.duedate && card.duedate !== '2010-01-01' && (
                   <Box
                     display={'flex'}
@@ -310,7 +274,7 @@ const CardModal: FC<CardModalProps> = ({ card, openModal, listName, boardName, h
                     fontSize="sm"
                   >
                     <Text>Duedate:</Text>
-                    <ModalUpdateDuedate
+                    <CardModalUpdateDuedate
                       cardDuedate={card.duedate ? card.duedate : format(new Date(), 'yyyy-MM-dd')}
                       cardId={card.id}
                     />
@@ -387,36 +351,7 @@ const CardModal: FC<CardModalProps> = ({ card, openModal, listName, boardName, h
               })}
             </Box>
             <Box id="COMMENT-ACTIVIY" display={'flex'} flexDirection="column" gap="30px">
-              <Box id="COMMENT ENTRY" display="flex" flexDirection="column" gap="5px">
-                <CardModalSection iconType="BiCommentDetail" sectionName="Comment" />
-                <Box display="flex" flexDirection="row" alignItems="flex-start" gap="15px">
-                  <Box>
-                    <Avatar bg="purple.500" color="white" name={cookies.username} size="sm" />
-                  </Box>
-                  <Box width="full" display="flex" flexDirection="column" alignItems="start" gap="15px">
-                    <Input
-                      placeholder="Add comment"
-                      size="lg"
-                      fontSize="sm"
-                      value={createCommentObject.message}
-                      onChange={(event: React.ChangeEvent<HTMLInputElement>) => onCardCommentChange(event)}
-                    />
-                    <Button
-                      disabled={createCommentObject.message.trim() === ''}
-                      colorScheme="teal"
-                      variant="solid"
-                      borderRadius="100"
-                      size="sm"
-                      onClick={() => {
-                        createCardComment();
-                        setCreateCommentObject((prev) => ({ ...prev, message: '' }));
-                      }}
-                    >
-                      Save
-                    </Button>
-                  </Box>
-                </Box>
-              </Box>
+              <CardModalComment cardId={card.id} />
               {card.comments.length !== 0 && (
                 <Box id="ACTIVITY SECTION" display="flex" flexDirection="column" gap="5px">
                   <CardModalSection iconType="BiCommentDetail" sectionName="Activity" />

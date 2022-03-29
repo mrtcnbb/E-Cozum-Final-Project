@@ -11,15 +11,15 @@ import {
 import { FC, useState } from 'react';
 import { BiCheckSquare } from 'react-icons/bi';
 import { useParams } from 'react-router-dom';
-import { fetchBoard } from '../../features/boardSlice';
-import authRequest from '../../service/authRequest';
-import { useAppDispatch } from '../../store';
+import { fetchBoard } from '../../../features/boardSlice';
+import authRequest from '../../../service/authRequest';
+import { useAppDispatch } from '../../../store';
 
-interface AddChecklistProps {
+interface CardModalAddChecklistProps {
   cardId: number;
 }
 
-const AddChecklist: FC<AddChecklistProps> = ({ cardId }) => {
+const CardModalAddChecklist: FC<CardModalAddChecklistProps> = ({ cardId }) => {
   const [createChecklistObject, setCreateChecklistObject] = useState({
     title: '',
     cardId: cardId,
@@ -96,4 +96,4 @@ const AddChecklist: FC<AddChecklistProps> = ({ cardId }) => {
   );
 };
 
-export default AddChecklist;
+export default CardModalAddChecklist;

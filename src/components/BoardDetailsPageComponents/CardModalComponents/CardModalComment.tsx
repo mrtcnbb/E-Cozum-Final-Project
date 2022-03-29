@@ -2,9 +2,9 @@ import { Box, Avatar, Input, Button } from '@chakra-ui/react';
 import React, { FC, useState } from 'react';
 import { useCookies } from 'react-cookie';
 import { useParams } from 'react-router-dom';
-import { fetchBoard } from '../../features/boardSlice';
-import authRequest from '../../service/authRequest';
-import { useAppDispatch } from '../../store';
+import { fetchBoard } from '../../../features/boardSlice';
+import authRequest from '../../../service/authRequest';
+import { useAppDispatch } from '../../../store';
 import CardModalSection from './CardModalSection';
 
 interface CardModalCommentProps {

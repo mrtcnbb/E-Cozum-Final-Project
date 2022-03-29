@@ -2,15 +2,15 @@ import { format } from 'date-fns';
 import { FC, useState } from 'react';
 import DatePicker from 'react-datepicker';
 import { useParams } from 'react-router-dom';
-import { fetchBoard } from '../../features/boardSlice';
-import authRequest from '../../service/authRequest';
-import { useAppDispatch } from '../../store';
+import { fetchBoard } from '../../../features/boardSlice';
+import authRequest from '../../../service/authRequest';
+import { useAppDispatch } from '../../../store';
 
-interface ModalDuedateProps {
+interface CardModalDuedateProps {
   cardId: number;
 }
 
-const ModalDuedate: FC<ModalDuedateProps> = ({ cardId }) => {
+const CardModalDuedate: FC<CardModalDuedateProps> = ({ cardId }) => {
   const [startDate, setStartDate] = useState(new Date());
   const { id } = useParams();
   const dispatch = useAppDispatch();
@@ -31,4 +31,4 @@ const ModalDuedate: FC<ModalDuedateProps> = ({ cardId }) => {
   );
 };
 
-export default ModalDuedate;
+export default CardModalDuedate;

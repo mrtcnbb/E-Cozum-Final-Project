@@ -2,16 +2,16 @@ import { format } from 'date-fns';
 import { FC } from 'react';
 import DatePicker from 'react-datepicker';
 import { useParams } from 'react-router-dom';
-import { fetchBoard } from '../../features/boardSlice';
-import authRequest from '../../service/authRequest';
-import { useAppDispatch } from '../../store';
+import { fetchBoard } from '../../../features/boardSlice';
+import authRequest from '../../../service/authRequest';
+import { useAppDispatch } from '../../../store';
 
-interface ModalUpdateDuedateProps {
+interface CardModalUpdateDuedateProps {
   cardId: number;
   cardDuedate: string;
 }
 
-const ModalUpdateDuedate: FC<ModalUpdateDuedateProps> = ({ cardId, cardDuedate }) => {
+const CardModalUpdateDuedate: FC<CardModalUpdateDuedateProps> = ({ cardId, cardDuedate }) => {
   const { id } = useParams();
   const dispatch = useAppDispatch();
 
@@ -33,4 +33,4 @@ const ModalUpdateDuedate: FC<ModalUpdateDuedateProps> = ({ cardId, cardDuedate }
   );
 };
 
-export default ModalUpdateDuedate;
+export default CardModalUpdateDuedate;

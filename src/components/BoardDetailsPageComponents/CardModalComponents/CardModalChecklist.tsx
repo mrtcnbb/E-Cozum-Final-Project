@@ -2,14 +2,14 @@ import { Box, Icon, Input, Progress, Text, IconButton } from '@chakra-ui/react';
 
 import { BiCheckSquare } from 'react-icons/bi';
 import { FC, useState } from 'react';
-import NameSettingsHolder from './NameSettingsHolder';
-import { Checklist } from '../../type/type';
+import NameSettingsHolder from '../NameSettingsHolder';
+import { Checklist } from '../../../type/type';
 import { AddIcon } from '@chakra-ui/icons';
-import authRequest from '../../service/authRequest';
-import { useAppDispatch } from '../../store';
+import authRequest from '../../../service/authRequest';
+import { useAppDispatch } from '../../../store';
 import { useParams } from 'react-router-dom';
-import { fetchBoard } from '../../features/boardSlice';
-import ModalChecklistItem from './ModalChecklistItem';
+import { fetchBoard } from '../../../features/boardSlice';
+import CardModalChecklistItem from './CardModalChecklistItem';
 
 interface CardModalChecklistProps {
   checklist?: Checklist;
@@ -78,7 +78,7 @@ const CardModalChecklist: FC<CardModalChecklistProps> = ({ checklist }) => {
         bg="teal.100"
       />
       {checklist?.items.map((item) => {
-        return <ModalChecklistItem key={item.id} checklistItem={item} />;
+        return <CardModalChecklistItem key={item.id} checklistItem={item} />;
       })}
       <Box id="ITEM ADD INPUT" display={'flex'} flexDirection="row" alignItems={'center'} gap="10px" pl="45px">
         <Input
