@@ -63,7 +63,16 @@ const BoardCard: FC<BoardCardProps> = ({ addBoard, boardName, boardId }) => {
             Add new board
           </Text>
         ) : (
-          <Text textAlign="center" fontWeight="semibold">
+          <Text
+            width={'90%'}
+            lineHeight="1.5em"
+            height="3em"
+            whiteSpace="nowrap"
+            textAlign="center"
+            overflow="hidden"
+            textOverflow="ellipsis"
+            fontWeight="semibold"
+          >
             {boardName}
           </Text>
         )}
