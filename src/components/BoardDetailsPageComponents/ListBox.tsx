@@ -1,20 +1,17 @@
 import { Box } from '@chakra-ui/react';
-import { FC, useEffect } from 'react';
-import { Card } from '../../features/boardSlice';
-import { useAppDispatch, useAppSelector } from '../../store';
+import { FC } from 'react';
+import { useAppSelector } from '../../store';
 import CardBox from './CardBox';
 import EditableAddButton from './EditableAddButton';
 import NameSettingsHolder from './NameSettingsHolder';
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
 interface ListBoxProps {
   listId: number;
   listName: string;
   boardName: string;
-  cards?: Card[];
 }
 
-const ListBox: FC<ListBoxProps> = ({ listId, listName, boardName, cards }) => {
+const ListBox: FC<ListBoxProps> = ({ listId, listName, boardName }) => {
   const list = useAppSelector((state) => state.boardState.data?.lists.find((item) => item.id === listId));
 
   return (
@@ -48,14 +45,7 @@ const ListBox: FC<ListBoxProps> = ({ listId, listName, boardName, cards }) => {
         <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" gap="20px" py="20px">
           {list?.cards?.map((item) => {
             return (
-              <CardBox
-                key={item.id}
-                cardProp={item}
-                cardId={item.id}
-                listId={list.id}
-                listName={list.title}
-                boardName={boardName}
-              />
+              <CardBox key={item.id} cardId={item.id} listId={list.id} listName={list.title} boardName={boardName} />
             );
           })}
         </Box>

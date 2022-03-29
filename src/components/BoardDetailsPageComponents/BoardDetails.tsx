@@ -34,15 +34,7 @@ const BoardDetails: FC = () => {
         }}
       >
         {board.data?.lists.map((item) => {
-          return (
-            <ListBox
-              key={item.id}
-              cards={item.cards}
-              listId={item.id}
-              listName={item.title}
-              boardName={board.data?.title!}
-            />
-          );
+          return <ListBox key={item.id} listId={item.id} listName={item.title} boardName={board.data?.title!} />;
         })}
         <EditableAddButton item="list" />
       </Box>
