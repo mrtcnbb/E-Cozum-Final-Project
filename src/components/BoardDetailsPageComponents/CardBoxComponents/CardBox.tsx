@@ -3,8 +3,8 @@ import { BiCommentDetail, BiFile } from 'react-icons/bi';
 import CardMiniLabel from './CardMiniLabel';
 import CardCheckTag from './CardCheckTag';
 import { FC, useState } from 'react';
-import { useAppSelector } from '../../store';
-import CardModal from './CardModalComponents/CardModal';
+import { useAppSelector } from '../../../store';
+import CardModal from '../CardModalComponents/CardModal';
 import React from 'react';
 import CardDateTag from './CardDateTag';
 
