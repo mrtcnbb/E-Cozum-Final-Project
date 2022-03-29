@@ -1,10 +1,10 @@
 import { Box, Text, Icon } from '@chakra-ui/react';
 import { BiCommentDetail, BiFile } from 'react-icons/bi';
-import MiniLabel from './MiniLabel';
+import CardMiniLabel from './CardMiniLabel';
 import CardCheckTag from './CardCheckTag';
 import { FC, useState } from 'react';
 import { useAppSelector } from '../../store';
-import CardModal from './CardModal';
+import CardModal from './CardModalComponents/CardModal';
 import React from 'react';
 import CardDateTag from './CardDateTag';
 
@@ -70,7 +70,7 @@ const CardBox: FC<CardBoxProps> = ({ cardId, listId, listName, boardName }) => {
       <Box p="15px">
         <Box display="flex" gap={2}>
           {card?.labels.map((item) => {
-            return <MiniLabel labelId={item.id} key={item.id} />;
+            return <CardMiniLabel labelId={item.id} key={item.id} />;
           })}
         </Box>
         <Text width={'90%'} overflow="hidden" textOverflow={'ellipsis'} whiteSpace="nowrap" my="18px">
