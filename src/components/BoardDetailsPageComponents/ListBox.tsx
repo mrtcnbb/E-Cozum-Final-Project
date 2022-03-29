@@ -1,7 +1,7 @@
 import { Box } from '@chakra-ui/react';
 import { FC } from 'react';
 import { useAppSelector } from '../../store';
-import CardBox from './CardBox';
+import CardBox from './CardBoxComponents/CardBox';
 import EditableAddButton from './EditableAddButton';
 import NameSettingsHolder from './NameSettingsHolder';
 
