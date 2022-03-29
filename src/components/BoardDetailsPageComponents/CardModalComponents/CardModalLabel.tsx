@@ -10,7 +10,7 @@ const CardModalLabel: FC<CardModalLabelProps> = ({ labelId, deleteLabel }) => {
   return (
     <Tag size="lg" borderRadius="full" variant="solid" colorScheme={labelId === 1 ? 'red' : 'gray'}>
       <TagLabel fontWeight="normal" fontSize="small" lineHeight="taller">
-        {labelId === 1 ? 'Önemli' : 'Önemsiz'}
+        {labelId === 1 ? 'High-Priority' : 'Low-Priority'}
       </TagLabel>
       <TagCloseButton onClick={() => deleteLabel(labelId)} />
     </Tag>

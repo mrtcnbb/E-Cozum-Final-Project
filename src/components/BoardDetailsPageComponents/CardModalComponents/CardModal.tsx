@@ -171,8 +171,7 @@ const CardModal: FC<CardModalProps> = ({ card, openModal, listName, boardName, h
                         }}
                       >
                         <Box display="flex" justifyContent="space-between" alignItems="center">
-                          <Text>{labels.data?.find((item) => item.id === 1)?.title}</Text>{' '}
-                          <Icon as={BiLabel} fontSize="2xl" pl="auto" />
+                          <Text>High-Priority</Text> <Icon as={BiLabel} fontSize="2xl" pl="auto" />
                         </Box>
                       </Checkbox>
                     </MenuItem>
@@ -206,8 +205,7 @@ const CardModal: FC<CardModalProps> = ({ card, openModal, listName, boardName, h
                         }}
                       >
                         <Box display="flex" justifyContent="space-between" alignItems="center">
-                          <Text>{labels.data?.find((item) => item.id === 2)?.title}</Text>{' '}
-                          <Icon as={BiLabel} fontSize="2xl" pl="auto" />
+                          <Text>Low-Priority</Text> <Icon as={BiLabel} fontSize="2xl" pl="auto" />
                         </Box>
                       </Checkbox>
                     </MenuItem>
