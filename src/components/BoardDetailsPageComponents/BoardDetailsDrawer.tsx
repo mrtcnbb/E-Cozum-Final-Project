@@ -31,9 +31,7 @@ const BoardDetailsDrawer: FC = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const { id } = useParams();
-
   const navigate = useNavigate();
-
   const dispatch = useAppDispatch();
 
   const [selectedUser, setSelectedUser] = useState<string>('');
@@ -56,8 +54,11 @@ const BoardDetailsDrawer: FC = () => {
   const deleteBoard = (id: string) => {
     authRequest()
       .delete(`board/${id}`)
-      .then((res) => {
+      .then(() => {
         navigate('/');
+      })
+      .catch(() => {
+        alert('Only board owner can delete this board!');
       });
   };
 
