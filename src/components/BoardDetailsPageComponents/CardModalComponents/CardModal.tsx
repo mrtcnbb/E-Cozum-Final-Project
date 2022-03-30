@@ -33,6 +33,7 @@ import CardModalDuedate from './CardModalDuedate';
 import CardModalUpdateDuedate from './CardModalUpdateDuedate';
 import CardModalBreadcrumb from './CardModalBreadcrumb';
 import CardModalComment from './CardModalComment';
+import useCardToast from '../../../hooks/useCardToast';
 
 interface CardModalProps {
   card: Card;
@@ -58,6 +59,8 @@ const CardModal: FC<CardModalProps> = ({ card, openModal, listName, boardName, h
   }, [dispatch]);
 
   const labels = useAppSelector((state) => state.labelsList);
+
+  const { showToast } = useCardToast();
 
   const onCardTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUpdateCardObject((prev) => ({ ...prev, title: event.target.value }));
@@ -123,6 +126,7 @@ const CardModal: FC<CardModalProps> = ({ card, openModal, listName, boardName, h
                           .put(`card/${card.id}`, { duedate: '2010-01-01' })
                           .then(() => {
                             dispatch(fetchBoard(id!));
+                            showToast();
                           });
                       }}
                     >
@@ -152,6 +156,7 @@ const CardModal: FC<CardModalProps> = ({ card, openModal, listName, boardName, h
                               .post('card-label', { cardId: card.id, labelId: 1 })
                               .then(() => {
                                 dispatch(fetchBoard(id!));
+                                showToast();
                               })
                               .catch((error) => {
                                 console.log('error :>> ', error);
@@ -163,6 +168,7 @@ const CardModal: FC<CardModalProps> = ({ card, openModal, listName, boardName, h
                               )
                               .then(() => {
                                 dispatch(fetchBoard(id!));
+                                showToast();
                               })
                               .catch((error) => {
                                 console.log(error);
@@ -186,6 +192,7 @@ const CardModal: FC<CardModalProps> = ({ card, openModal, listName, boardName, h
                               .post('card-label', { cardId: card.id, labelId: 2 })
                               .then(() => {
                                 dispatch(fetchBoard(id!));
+                                showToast();
                               })
                               .catch((error) => {
                                 console.log('error :>> ', error);
@@ -197,6 +204,7 @@ const CardModal: FC<CardModalProps> = ({ card, openModal, listName, boardName, h
                               )
                               .then(() => {
                                 dispatch(fetchBoard(id!));
+                                showToast();
                               })
                               .catch((error) => {
                                 console.log(error);
@@ -338,6 +346,7 @@ const CardModal: FC<CardModalProps> = ({ card, openModal, listName, boardName, h
                       card.labels?.forEach((item) => {
                         deleteCardLabel(item.CardLabel.id);
                       });
+                      showToast();
                     }}
                   />
                 </Box>

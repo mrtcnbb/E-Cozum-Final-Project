@@ -10,6 +10,7 @@ import { useAppDispatch } from '../../../store';
 import { useParams } from 'react-router-dom';
 import { fetchBoard } from '../../../features/boardSlice';
 import CardModalChecklistItem from './CardModalChecklistItem';
+import useCardToast from '../../../hooks/useCardToast';
 
 interface CardModalChecklistProps {
   checklist?: Checklist;
@@ -24,6 +25,7 @@ interface AddChecklistItemObjectProps {
 const CardModalChecklist: FC<CardModalChecklistProps> = ({ checklist }) => {
   const { id } = useParams();
   const dispatch = useAppDispatch();
+  const { showToast } = useCardToast();
 
   const [addChecklistItemObject, setAddChecklistItemObject] = useState<AddChecklistItemObjectProps>({
     checklistId: checklist?.id!,
@@ -40,6 +42,7 @@ const CardModalChecklist: FC<CardModalChecklistProps> = ({ checklist }) => {
       .post(`checklist-item`, addChecklistItemObject)
       .then(() => {
         dispatch(fetchBoard(id!));
+        showToast();
       })
       .catch((error) => {
         console.log(error);

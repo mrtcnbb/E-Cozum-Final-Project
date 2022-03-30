@@ -3,6 +3,7 @@ import { FC, useState } from 'react';
 import { BiTrashAlt } from 'react-icons/bi';
 import { useParams } from 'react-router-dom';
 import { fetchBoard } from '../../../features/boardSlice';
+import useCardToast from '../../../hooks/useCardToast';
 import authRequest from '../../../service/authRequest';
 import { useAppDispatch } from '../../../store';
 import { ChecklistItem } from '../../../type/type';
@@ -14,6 +15,7 @@ interface CardModalChecklistItemProps {
 const CardModalChecklistItem: FC<CardModalChecklistItemProps> = ({ checklistItem }) => {
   const { id } = useParams();
   const dispatch = useAppDispatch();
+  const { showToast } = useCardToast();
 
   const [isEditable, setIsEditable] = useState<boolean>(false);
 
@@ -37,6 +39,7 @@ const CardModalChecklistItem: FC<CardModalChecklistItemProps> = ({ checklistItem
       .delete(`checklist-item/${checklistItem.id}`)
       .then(() => {
         dispatch(fetchBoard(id!));
+        showToast();
       })
       .catch((error) => {
         console.log(error);
@@ -57,6 +60,7 @@ const CardModalChecklistItem: FC<CardModalChecklistItemProps> = ({ checklistItem
               .put(`checklist-item/${checklistItem.id}`, { isChecked: false })
               .then(() => {
                 dispatch(fetchBoard(id!));
+                showToast();
               })
               .catch((error) => {
                 console.log(error);
@@ -66,6 +70,7 @@ const CardModalChecklistItem: FC<CardModalChecklistItemProps> = ({ checklistItem
               .put(`checklist-item/${checklistItem.id}`, { isChecked: true })
               .then(() => {
                 dispatch(fetchBoard(id!));
+                showToast();
               })
               .catch((error) => {
                 console.log(error);

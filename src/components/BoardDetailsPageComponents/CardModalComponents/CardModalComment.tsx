@@ -3,6 +3,7 @@ import React, { FC, useState } from 'react';
 import { useCookies } from 'react-cookie';
 import { useParams } from 'react-router-dom';
 import { fetchBoard } from '../../../features/boardSlice';
+import useCardToast from '../../../hooks/useCardToast';
 import authRequest from '../../../service/authRequest';
 import { useAppDispatch } from '../../../store';
 import CardModalSection from './CardModalSection';
@@ -14,6 +15,7 @@ interface CardModalCommentProps {
 const CardModalComment: FC<CardModalCommentProps> = ({ cardId }) => {
   const { id } = useParams();
   const dispatch = useAppDispatch();
+  const { showToast } = useCardToast();
   const [cookies] = useCookies(['token', 'username']);
 
   const [createCommentObject, setCreateCommentObject] = useState({
@@ -30,6 +32,7 @@ const CardModalComment: FC<CardModalCommentProps> = ({ cardId }) => {
       .post(`comment`, createCommentObject)
       .then(() => {
         dispatch(fetchBoard(id!));
+        showToast();
       })
       .catch((error) => {
         console.log(error);

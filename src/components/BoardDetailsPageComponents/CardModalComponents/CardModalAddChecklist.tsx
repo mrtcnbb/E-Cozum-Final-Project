@@ -12,6 +12,7 @@ import { FC, useState } from 'react';
 import { BiCheckSquare } from 'react-icons/bi';
 import { useParams } from 'react-router-dom';
 import { fetchBoard } from '../../../features/boardSlice';
+import useCardToast from '../../../hooks/useCardToast';
 import authRequest from '../../../service/authRequest';
 import { useAppDispatch } from '../../../store';
 
@@ -29,6 +30,7 @@ const CardModalAddChecklist: FC<CardModalAddChecklistProps> = ({ cardId }) => {
 
   const { id } = useParams();
   const dispatch = useAppDispatch();
+  const { showToast } = useCardToast();
 
   const onCreateChecklist = (event: any) => {
     setCreateChecklistObject((prev) => ({ ...prev, title: event.target.value }));
@@ -39,6 +41,7 @@ const CardModalAddChecklist: FC<CardModalAddChecklistProps> = ({ cardId }) => {
       .post('checklist', createChecklistObject)
       .then(() => {
         dispatch(fetchBoard(id!));
+        showToast();
       })
       .catch((error) => {
         console.log(error);

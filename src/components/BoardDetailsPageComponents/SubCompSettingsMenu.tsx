@@ -6,6 +6,7 @@ import { BiDotsVerticalRounded } from 'react-icons/bi';
 import { useAppDispatch } from '../../store';
 import { fetchBoard } from '../../features/boardSlice';
 import { useParams } from 'react-router-dom';
+import useCardToast from '../../hooks/useCardToast';
 
 interface SubCompSettingsMenuProps {
   subCompName: string;
@@ -21,8 +22,8 @@ const SubCompSettingsMenu: FC<SubCompSettingsMenuProps> = ({
   handleEditListName,
 }) => {
   const { id } = useParams();
-
   const dispatch = useAppDispatch();
+  const { showToast } = useCardToast();
 
   const deleteList = (listId: number) => {
     authRequest()
@@ -64,6 +65,7 @@ const SubCompSettingsMenu: FC<SubCompSettingsMenuProps> = ({
               deleteList(listId!);
             } else {
               deleteChecklist(checklistId!);
+              showToast();
             }
           }}
           icon={<DeleteIcon />}
