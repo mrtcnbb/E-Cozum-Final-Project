@@ -9,6 +9,7 @@ This project is a Kanban App and is built for E-Çözüm & Patika Bootcamp Final
 - Redux-Toolkit
 - Redux-Thunk
 - React-Router
+- React-Datepicker
 - Axios
 - Chakra-UI
 
