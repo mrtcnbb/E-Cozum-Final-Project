@@ -17,6 +17,7 @@ function App() {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
+    console.log("asimkilic");
     if (cookies.token) {
       dispatch(setIsLogged(true));
     }
