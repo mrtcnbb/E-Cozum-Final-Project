@@ -1,7 +1,7 @@
 import './App.css';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import Auth from './pages/auth/Auth';
-import Home from './pages/home/Home';
+import Home from './pages/Home/Home';
 import { useEffect } from 'react';
 import { setIsLogged } from './features/authSlice';
 import { useAppDispatch, useAppSelector } from './store';

@@ -5,15 +5,16 @@ interface FormInputProps {
   inputLabelText: string;
   propsText: string;
   placeholder: string;
+  id: string;
   type?: string;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const FormInput: FC<FormInputProps> = ({ inputLabelText, propsText, placeholder, type, onChange }) => {
+const FormInput: FC<FormInputProps> = ({ inputLabelText, propsText, placeholder, type, onChange, id }) => {
   return (
     <FormControl>
       <FormLabel htmlFor={propsText}>{inputLabelText}</FormLabel>
-      <Input id={propsText} name={propsText} type={type} placeholder={placeholder} onChange={onChange} required />
+      <Input id={id} name={propsText} type={type} placeholder={placeholder} onChange={onChange} required />
     </FormControl>
   );
 };

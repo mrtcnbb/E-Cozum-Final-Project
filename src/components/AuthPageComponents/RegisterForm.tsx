@@ -42,6 +42,7 @@ const RegisterForm: FC = () => {
               propsText="username"
               placeholder="username"
               onChange={handleFormData}
+              id="usernameReg"
             />
             <FormInput
               inputLabelText="Password"
@@ -49,6 +50,7 @@ const RegisterForm: FC = () => {
               placeholder="password"
               type="password"
               onChange={handleFormData}
+              id="passwordReg1"
             />
             <FormInput
               inputLabelText="Confirm Password"
@@ -56,6 +58,7 @@ const RegisterForm: FC = () => {
               placeholder="confirm password"
               type="password"
               onChange={handleFormData}
+              id="passwordReg2"
             />
             <Button type="submit" color="purple.500">
               Register

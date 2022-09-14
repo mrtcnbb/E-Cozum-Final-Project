@@ -51,6 +51,7 @@ const LoginForm: FC = () => {
               propsText="username"
               placeholder="username"
               onChange={handleFormData}
+              id="usernameLog"
             />
             <FormInput
               inputLabelText="Password"
@@ -58,6 +59,7 @@ const LoginForm: FC = () => {
               placeholder="password"
               type="password"
               onChange={handleFormData}
+              id="passwordLog"
             />
             <Button type="submit" color="purple.500">
               Login
